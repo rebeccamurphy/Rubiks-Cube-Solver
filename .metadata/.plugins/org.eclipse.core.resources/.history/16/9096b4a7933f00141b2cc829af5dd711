@@ -1,0 +1,33 @@
+package rubik;
+
+public class Cubies {
+	char[][] A =new char[][] {
+			
+			{'R', 'Y', 'G'},//0
+			{'R', 'G'},		//1
+			{'O', 'Y','G'},	//2
+			
+			{'R', 'G'},		//3
+			{'G'},			//4 important!
+			{'O', 'G'},		//5
+			
+			{'R', 'W', 'G'},//6 
+			{'G', 'W'},		//7 important!
+			{'G', 'W','O'}	//8
+	};
+	char[][] B =new char[][] {
+			
+			{'R', 'Y', 'G'},//0
+			{'R', 'G'},		//1
+			{'O', 'Y','G'},	//2
+			
+			{'R', 'G'},		//3
+			{'G'},			//4 important!
+			{'G', 'W','O'},	//5
+			
+			{'Y', 'R'},		//6 
+			{'Y'},			//7 important!
+			{'Y', 'O'}		//8
+	};
+	
+}

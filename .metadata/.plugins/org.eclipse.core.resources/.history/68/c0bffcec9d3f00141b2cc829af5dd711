@@ -1,0 +1,50 @@
+package rubik;
+
+public class Cubies {
+	char[][] A =new char[][] {
+			
+			{'R', 'Y', 'G'},//0
+			{'R', 'G'},		//1
+			{'O', 'Y','G'},	//2
+			
+			{'R', 'G'},		//3
+			{'G'},			//4 important!
+			{'O', 'G'},		//5
+			
+			{'R', 'W', 'G'},//6 
+			{'G', 'W'},		//7 important!
+			{'G', 'W','O'}	//8
+	};
+	char[][] B =new char[][] {
+			
+			{'Y', 'G',},	//0
+			{'Y'},			//1 important!
+			{'Y', 'O'},		//2
+			
+			{'R'},			//3 important!
+			{},				//4 important!
+			{'O'},			//5 important!
+			
+			{'R', 'W'},		//6 
+			{'W'},			//7 important!
+			{'O','W'}		//8
+	};
+	char[][] C =new char[][] {
+			
+			{'R', 'B', 'Y'},//0
+			{'Y', 'B'},		//1 
+			{'Y', 'B', 'O'},//2
+			
+			{'R', 'B'},		//3 
+			{'B'},			//4 important!
+			{'O'},			//5 
+			
+			{'R', 'W'},		//6 
+			{'W'},			//7 important!
+			{'O','W'}		//8
+	};
+	public static void makeCube(String cubeString, char[][] front, char[][] middle, char[][] back){
+		System.out.println(cubeString);
+		
+	}
+}
