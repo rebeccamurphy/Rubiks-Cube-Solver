@@ -14,12 +14,14 @@ public class Solvable {
 	            String file = args[0];
 	            String strFile = readFile(file, StandardCharsets.UTF_8);
 	            strFile = strFile.replaceAll("\\s+","");
-	            Cubies.makeCube(strFile, left, middle, right);
+	            //Cubies.checkValid(strFile, left, middle, right);
+	            System.out.println("the cube is valid, " +Cubies.checkValid(strFile));
 	            //System.out.println(left[4][0]=='G');
-	            System.out.println(Cubies.checkValid(left, middle, right));
+	            //System.out.println(Cubies.checkValid(left, middle, right));
 	           // Cubies.checkValid(left, middle, right);
 	        }
 	        else{
+	        	System.out.println("WXY".contains("YXW"));
 	        	System.out.println("Invalid File Name");
 	        }
 	    }
