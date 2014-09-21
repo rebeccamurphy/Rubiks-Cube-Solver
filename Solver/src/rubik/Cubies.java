@@ -100,9 +100,24 @@ public class Cubies {
 		
 		{50, 26}, //C-21
 	};
+	public static char[][] edgesFace = new char[][]{
+		{'Y', 'G'},	//A-01
+		{'R', 'G'}, //A-10
+		{'O', 'G'}, //A-12
+		{'W', 'G'}, //A-21
+		{'Y', 'R'}, //B-00
+		{'Y', 'O'}, //B-02
+		{'w', 'R'}, //B-20
+		{'W', 'O'}, //B-22
+		{'Y', 'B'}, //C-01
+		{'R', 'B'}, //C-10
+		{'B', 'O'}, //C-12
+		{'W', 'B'}, //C-21
+	};
 	public static int[] centers = new int[] {22, 49, 4,25, 40, 19};
 	public static char[] centersColors = new char[] {'Y', 'W', 'R','B', 'O', 'G'};
 	public static char[][]cubeCorner =new char[8][3];
+	public static char[][]cubeEdge = new char[12][2];
 	public static boolean makeCube(String cubeString/*, char[][][] left, char[][][] middle, char[][][] right*/){
 		for (int i =0; i<6; i++ ){
 			//check centers
@@ -111,7 +126,7 @@ public class Cubies {
 				return false;
 		}
 		for (int i =0; i< corners.length; i++){
-			//check corners
+			//check corners for sticker swap
 			cubeCorner[i][0] = cubeString.charAt(corners[i][0]);
 			cubeCorner[i][1] = cubeString.charAt(corners[i][1]);
 			cubeCorner[i][2] = cubeString.charAt(corners[i][2]);
@@ -128,6 +143,20 @@ public class Cubies {
 				}
 			}
 			
+		}
+		for (int i=0; i<edges.length; i++){
+			//check edges for a sticker swap
+			cubeEdge[i][0] = cubeString.charAt(edges[i][0]);
+			cubeEdge[i][1] = cubeString.charAt(edges[i][1]);
+			for (int j =0; j < edgesFace.length; j++){
+				if (checkFaces(cubeEdge[i], edgesFace[j])){
+					if (cubeEdge[i][0]==edgesFace[j][0] && cubeEdge[i][1]==edgesFace[j][1]){
+						System.out.println("Edge check " + i );		
+					}
+					else
+						return false;
+				}
+			}
 		}
 				
 		return true;
@@ -163,4 +192,5 @@ public class Cubies {
 		}
 		return false;
 	}
+	
 }
