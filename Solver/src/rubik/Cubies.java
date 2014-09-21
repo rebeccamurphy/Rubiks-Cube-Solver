@@ -116,8 +116,9 @@ public class Cubies {
 	};
 	public static int[] centers = new int[] {22, 49, 4,25, 40, 19};
 	public static char[] centersColors = new char[] {'Y', 'W', 'R','B', 'O', 'G'};
-	public static char[][]cubeCorner =new char[8][3];
-	public static char[][]cubeEdge = new char[12][2];
+	public static char[][]cubeCornerFaces =new char[8][3];
+	public static char[][]cubeEdgeFaces = new char[12][2];
+	public static int cubeCorners[]= new int[8];
 	public static boolean makeCube(String cubeString/*, char[][][] left, char[][][] middle, char[][][] right*/){
 		for (int i =0; i<6; i++ ){
 			//check centers
@@ -127,34 +128,44 @@ public class Cubies {
 		}
 		for (int i =0; i< corners.length; i++){
 			//check corners for sticker swap
-			cubeCorner[i][0] = cubeString.charAt(corners[i][0]);
-			cubeCorner[i][1] = cubeString.charAt(corners[i][1]);
-			cubeCorner[i][2] = cubeString.charAt(corners[i][2]);
+			cubeCornerFaces[i][0] = cubeString.charAt(corners[i][0]);
+			cubeCornerFaces[i][1] = cubeString.charAt(corners[i][1]);
+			cubeCornerFaces[i][2] = cubeString.charAt(corners[i][2]);
 			
 			for(int j=0; j< cornersFaces.length; j++){
-				if (checkFaces(cubeCorner[i], cornersFaces[j])){
-					if (checkFaceRotation(cubeCorner[i],i, j)){
-						System.out.println("pos " +j +" check face rotation " +checkFaceRotation(cubeCorner[i], j, i));
+				if (checkFaces(cubeCornerFaces[i], cornersFaces[j])){
+					if (checkFaceRotation(cubeCornerFaces[i],i, j)){
+						cubeCorners[i]= j;
+						System.out.println("pos " +j +" check face rotation " +checkFaceRotation(cubeCornerFaces[i], i, j));
 						j = cornersFaces.length;
 					}
-					else 
+					else {
+						System.out.println("Sticker swapped on corner.");
 						return false;
-					
+					}
 				}
 			}
 			
 		}
+		//Check if any corners were swapped illegally
+		if (getInvCount(cubeCorners) %2 != 0){
+			System.out.println("Corners swapped illegally");
+			return false;
+		}
+		
 		for (int i=0; i<edges.length; i++){
 			//check edges for a sticker swap
-			cubeEdge[i][0] = cubeString.charAt(edges[i][0]);
-			cubeEdge[i][1] = cubeString.charAt(edges[i][1]);
+			cubeEdgeFaces[i][0] = cubeString.charAt(edges[i][0]);
+			cubeEdgeFaces[i][1] = cubeString.charAt(edges[i][1]);
 			for (int j =0; j < edgesFace.length; j++){
-				if (checkFaces(cubeEdge[i], edgesFace[j])){
-					if (cubeEdge[i][0]==edgesFace[j][0] && cubeEdge[i][1]==edgesFace[j][1]){
+				if (checkFaces(cubeEdgeFaces[i], edgesFace[j])){
+					if (cubeEdgeFaces[i][0]==edgesFace[j][0] && cubeEdgeFaces[i][1]==edgesFace[j][1]){
 						System.out.println("Edge check " + i );		
 					}
-					else
+					else{
+						System.out.println("Sticker swapped on edge.");
 						return false;
+					}
 				}
 			}
 		}
@@ -175,22 +186,35 @@ public class Cubies {
 	}
 	private static boolean checkFaceRotation(char[] cubieFaces, int currPos, int origin){
 		String faceStr = (new String(cubieFaces));
+		//System.out.println(currPos + " " +origin);
 		if ( ((origin==0||origin==3||origin==6||origin==7) &&(currPos ==0 ||  currPos ==3 ||currPos==6||currPos==7))
 			||((origin==1||origin==2||origin==4||origin==5)&&(currPos==1|| currPos==2||currPos==4||currPos==5))){
 			//System.out.println(currPos +" " + faceStr + " " + new String(cornersFaces[currPos]));
 			//System.out.println(faceStr.equals(new String(cornersFaces[pos])));
-			return faceStr.equals(new String(cornersFaces[currPos])) 
-					|| faceStr.equals(cornersFaces[currPos][2] +cornersFaces[currPos][0]+cornersFaces[currPos][0])
-					|| faceStr.equals(cornersFaces[currPos][1]+ cornersFaces[currPos][2] + cornersFaces[currPos][0]);
+			return faceStr.equals(new String(cornersFaces[origin])) 
+					|| faceStr.equals(""+cornersFaces[origin][2] +cornersFaces[origin][0]+cornersFaces[origin][0])
+					|| faceStr.equals(""+cornersFaces[origin][1]+ cornersFaces[origin][2] + cornersFaces[origin][0]);
 		}
 		else if (((origin==0 || origin==3 ||origin==6||origin==7) && (currPos==1 || currPos==2 || currPos==4 ||currPos==5))
 				||((origin==1 ||origin==2||origin==4||origin==5)&&(currPos==0 || currPos==3 || currPos==6||currPos==7))){
 			//System.out.println(currPos + " " +faceStr);
-			return faceStr.equals(cornersFaces[currPos][0]+cornersFaces[currPos][2]+cornersFaces[currPos][1]) 
-					|| faceStr.equals(cornersFaces[currPos][1] +cornersFaces[currPos][0]+cornersFaces[currPos][2])
-					|| faceStr.equals(cornersFaces[currPos][2]+ cornersFaces[currPos][1] + cornersFaces[currPos][0]);
+			//System.out.println("" +cornersFaces[origin][0]+ cornersFaces[origin][2] + cornersFaces[currPos][1]);
+			return faceStr.equals(""+ cornersFaces[origin][0]+cornersFaces[origin][2]+cornersFaces[origin][1]) 
+					|| faceStr.equals("" +cornersFaces[origin][1] +cornersFaces[origin][0]+cornersFaces[origin][2])
+					|| faceStr.equals("" +cornersFaces[origin][2]+ cornersFaces[origin][1] + cornersFaces[origin][0]);
 		}
 		return false;
 	}
-	
+	private static int getInvCount(int arr[])
+	{
+	  int inv_count = 0;
+	  int i, j;
+	  int n = arr.length;
+	  for(i = 0; i < n - 1; i++)
+	    for(j = i+1; j < n; j++)
+	      if(arr[i] > arr[j])
+	        inv_count++;
+	 
+	  return inv_count;
+	}
 }

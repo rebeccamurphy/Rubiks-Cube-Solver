@@ -21,7 +21,7 @@ public class Solvable {
 	           // Cubies.checkValid(left, middle, right);
 	        }
 	        else{
-	        	System.out.println("WXY".contains("YXW"));
+	        	//System.out.println("WXY".contains("YXW"));
 	        	System.out.println("Invalid File Name");
 	        }
 	    }
