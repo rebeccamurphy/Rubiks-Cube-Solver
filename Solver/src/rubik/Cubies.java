@@ -119,6 +119,8 @@ public class Cubies {
 	public static char[][]cubeCornerFaces =new char[8][3];
 	public static char[][]cubeEdgeFaces = new char[12][2];
 	public static int cubeCorners[]= new int[8];
+	public static int cubeEdges[] = new int[12];
+	public static int cubeFlippedEdges =0;
 	public static boolean makeCube(String cubeString/*, char[][][] left, char[][][] middle, char[][][] right*/){
 		for (int i =0; i<6; i++ ){
 			//check centers
@@ -140,18 +142,14 @@ public class Cubies {
 						j = cornersFaces.length;
 					}
 					else {
-						System.out.println("Sticker swapped on corner.");
+						System.out.println("Sticker swapped on corner. Pos: " +i +" Colors: " + (new String(cubeCornerFaces[i])));
 						return false;
 					}
 				}
 			}
 			
 		}
-		//Check if any corners were swapped illegally
-		if (getInvCount(cubeCorners) %2 != 0){
-			System.out.println("Corners swapped illegally");
-			return false;
-		}
+		
 		
 		for (int i=0; i<edges.length; i++){
 			//check edges for a sticker swap
@@ -160,16 +158,32 @@ public class Cubies {
 			for (int j =0; j < edgesFace.length; j++){
 				if (checkFaces(cubeEdgeFaces[i], edgesFace[j])){
 					if (cubeEdgeFaces[i][0]==edgesFace[j][0] && cubeEdgeFaces[i][1]==edgesFace[j][1]){
-						System.out.println("Edge check " + i );		
+						cubeEdges[i] = j;
+						//System.out.println("Edge check " + i + " " + (new String (cubeEdgeFaces[i])) );		
 					}
 					else{
-						System.out.println("Sticker swapped on edge.");
-						return false;
+						cubeEdges[i] = j;
+						//System.out.println("Edge flipped check " + i + " " + (new String (cubeEdgeFaces[i])) );
+						cubeFlippedEdges++;
+						//return false;
 					}
 				}
 			}
 		}
-				
+
+		System.out.println(cubeFlippedEdges);
+		if (cubeFlippedEdges %2 != 0){
+			System.out.println("Sticker swapped on edge.");
+			return false;
+		}
+		
+		
+		if ((getInvCount(cubeEdges)+getInvCount(cubeCorners)) %2 != 0){
+			System.out.println("Corners swapped illegally " + getInvCount(cubeCorners));
+			System.out.println("Edges swapped illegally " + getInvCount(cubeEdges));
+			return false;
+		}
+		
 		return true;
 	}
 	public static boolean checkValid(String cubeString/*char[][] left, char[][] middle, char[][] right*/){
@@ -192,7 +206,7 @@ public class Cubies {
 			//System.out.println(currPos +" " + faceStr + " " + new String(cornersFaces[currPos]));
 			//System.out.println(faceStr.equals(new String(cornersFaces[pos])));
 			return faceStr.equals(new String(cornersFaces[origin])) 
-					|| faceStr.equals(""+cornersFaces[origin][2] +cornersFaces[origin][0]+cornersFaces[origin][0])
+					|| faceStr.equals(""+cornersFaces[origin][2] +cornersFaces[origin][0]+cornersFaces[origin][1])
 					|| faceStr.equals(""+cornersFaces[origin][1]+ cornersFaces[origin][2] + cornersFaces[origin][0]);
 		}
 		else if (((origin==0 || origin==3 ||origin==6||origin==7) && (currPos==1 || currPos==2 || currPos==4 ||currPos==5))
@@ -210,11 +224,12 @@ public class Cubies {
 	  int inv_count = 0;
 	  int i, j;
 	  int n = arr.length;
-	  for(i = 0; i < n - 1; i++)
-	    for(j = i+1; j < n; j++)
+	  for(i = 0; i < n - 1; i++){
+		  //System.out.println(arr[i]);
+		  for(j = i+1; j < n; j++)
 	      if(arr[i] > arr[j])
 	        inv_count++;
-	 
+	  }
 	  return inv_count;
 	}
 }
