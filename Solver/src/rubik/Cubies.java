@@ -4,57 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Cubies {
-	static char[][][] A =new char[][][] {
-		{
-			{'R', 'Y', 'G'},//0
-			{'Y', 'G'},		//1
-			{'O', 'Y','G'},	//2
-		},
-		{
-			{'R', 'G'},		//3
-			{'G'},			//4 important!
-			{'O', 'G'},		//5
-		},
-		{
-			{'R', 'W', 'G'},//6 
-			{'G', 'W'},		//7 important!
-			{'G', 'W','O'}	//8
-		}
-	};
-	static char[][][] B =new char[][][] {
-		{
-			{'Y', 'R',},	//0
-			{'Y'},			//1 important!
-			{'Y', 'O'},		//2
-		},
-		{
-			{'R'},			//3 important!
-			null,			//4 important!
-			{'O'},			//5 important!
-		},
-		{
-			{'R', 'W'},		//6 
-			{'W'},			//7 important!
-			{'O','W'}		//8
-		}
-	};
-	static char[][][] C =new char[][][] {
-		{
-			{'R', 'B', 'Y'},//0
-			{'Y', 'B'},		//1 
-			{'Y', 'B', 'O'},//2
-		},
-		{
-			{'R', 'B'},		//3 
-			{'B'},			//4 important!
-			{'O', 'B'},			//5 
-		},
-		{
-			{'R', 'B','W'},		//6 
-			{'B','W'},			//7 important!
-			{'B','W','O'}		//8
-		}
-	};
+	
 	static int[][] corners =new int[][]{
 		//starting 0,0
 		{12, 6, 11}, //A-00
@@ -145,7 +95,10 @@ public class Cubies {
 			
 			for(int j=0; j< cornersFaces.length; j++){
 				if (checkFaces(cubeCornerFaces[i], cornersFaces[j])){
+					cubeCorners[i] = j;
 					checkFaceRotation(cubeCornerFaces[i],i, j);
+					if (!checkFaceStickers(cubeCornerFaces[i], i, j));
+						return false;
 				}
 					
 			}
@@ -164,9 +117,13 @@ public class Cubies {
 			}
 			checkEdgeRotation(cubeEdgeFaces[i], i);
 		}	
-		
+		/*
 		System.out.println((getInvCount(cubeEdges)+getInvCount(cubeCorners)));
-		
+		for (int i=0; i<cubeEdges.length; i++)
+			System.out.print(cubeEdges[i] +" ");
+		System.out.println();
+		for (int i=0; i<cubeCorners.length; i++)
+			System.out.print(cubeCorners[i] +" ");*/
 		if (((getInvCount(cubeEdges)+getInvCount(cubeCorners)) %2 != 0)){
 			//permutation check
 			System.out.println("Corners swapped illegally " + getInvCount(cubeCorners));
@@ -175,9 +132,9 @@ public class Cubies {
 		}
 		
 		System.out.println("cubeEdgeParity " +cubeEdgeParity);
-		if(cubeEdgeParity%2!=0)
+		if(cubeEdgeParity%2!=0){	
 			return false;
-		
+		}
 		System.out.println("cubeCornerParity " + cubeCornerParity);
 		if (cubeCornerParity%3!=0)//corner parity check
 			return false;
@@ -205,8 +162,10 @@ public class Cubies {
 			System.out.println(faceStr +" " +(new String(cornersFaces[origin])));
 			//cubeFlippedCornerOrigin++;
 		}*/
-		if (cubieFaces[0]==cornersFaces[origin][0]) //correct
-			cubeCornerParity+=0;
+		if (cubieFaces[0]==cornersFaces[origin][0]){
+				//correct
+				cubeCornerParity+=0;
+		}
 		else if (cubieFaces[0]==cornersFaces[origin][2]) //clockwise
 			cubeCornerParity+=1;
 		else if (cubieFaces[0]==cornersFaces[origin][1]) //counter-clockwise
@@ -215,6 +174,28 @@ public class Cubies {
 			System.out.println("Corner Parity went wrong");
 		
 	}
+	private static boolean checkFaceStickers(char[] cubieFaces, int currPos, int origin){
+		String faceStr = (new String(cubieFaces));
+		//System.out.println(currPos + " " +origin);
+		if ( ((origin==0||origin==3||origin==6||origin==7) &&(currPos ==0 ||  currPos ==3 ||currPos==6||currPos==7))
+			||((origin==1||origin==2||origin==4||origin==5)&&(currPos==1|| currPos==2||currPos==4||currPos==5))){
+			//System.out.println(currPos +" " + faceStr + " " + new String(cornersFaces[currPos]));
+			//System.out.println(faceStr.equals(new String(cornersFaces[pos])));
+			return faceStr.equals(new String(cornersFaces[origin])) 
+					|| faceStr.equals(""+cornersFaces[origin][2] +cornersFaces[origin][0]+cornersFaces[origin][1])
+					|| faceStr.equals(""+cornersFaces[origin][1]+ cornersFaces[origin][2] + cornersFaces[origin][0]);
+		}
+		else if (((origin==0 || origin==3 ||origin==6||origin==7) && (currPos==1 || currPos==2 || currPos==4 ||currPos==5))
+				||((origin==1 ||origin==2||origin==4||origin==5)&&(currPos==0 || currPos==3 || currPos==6||currPos==7))){
+			//System.out.println(currPos + " " +faceStr);
+			//System.out.println("" +cornersFaces[origin][0]+ cornersFaces[origin][2] + cornersFaces[currPos][1]);
+			return faceStr.equals(""+ cornersFaces[origin][0]+cornersFaces[origin][2]+cornersFaces[origin][1]) 
+					|| faceStr.equals("" +cornersFaces[origin][1] +cornersFaces[origin][0]+cornersFaces[origin][2])
+					|| faceStr.equals("" +cornersFaces[origin][2]+ cornersFaces[origin][1] + cornersFaces[origin][0]);
+		}
+		return false;
+	}
+	
 	private static void checkEdgeRotation(char[]cubieFaces, int currCubeIndex){
 		char[] origin = new char[6];
 		for (int i=0; i<edgesFace.length; i++){
@@ -227,6 +208,8 @@ public class Cubies {
 		}
 		for(int j=0; j<origin.length; j++){
 			if (origin[j]!='0' && cubieFaces[j]!='0'){
+			//WRONG
+			//Have to account for edges differently. 
 				if (origin[j]==cubieFaces[j])
 					cubeEdgeParity+=0;
 				else
