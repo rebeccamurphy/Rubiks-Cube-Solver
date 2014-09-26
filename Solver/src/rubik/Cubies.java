@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Cubies {
-	
+	/*
 	static int[][] corners =new int[][]{
 		//starting 0,0
+		//X  Y  Z
 		{12, 6, 11}, //A-00
 		{30, 36, 29},//A-02
 		
@@ -23,6 +24,8 @@ public class Cubies {
 		{47, 35, 44} //C-22
 	};
 	static char[][] cornersFaces = new char[][]{
+		//X=Y,W; Y=G,B, Z =O,R
+		//X    Y    Z
 		{'Y', 'R', 'G'}, //A-00
 		{'Y', 'O', 'G'}, //A-02
 		{'W', 'R', 'G'}, //A-20
@@ -32,7 +35,37 @@ public class Cubies {
 		{'Y', 'B', 'O'}, //C-02
 		{'W', 'R', 'B'}, //C-20
 		{'W', 'B', 'O'}
+	};*/
+
+	static int[][] corners =new int[][]{
+		//starting 0,0
+		//X  Y  Z
+		{12, 11, 6}, //A-00
+		{30, 29, 36},//A-02
+		
+		{51, 9, 0 }, //A-20
+		{45, 27, 42},//A-22
+		
+		{14, 15, 8}, //C-00
+		{32, 33, 38},//C-02
+		
+		{53, 17, 2}, //C-20
+		{47, 35, 44} //C-22
 	};
+	static char[][] cornersFaces = new char[][]{
+		//X=Y,W; Y=G,B, Z =O,R
+		//X    Y    Z
+		{'Y', 'G', 'R'}, //A-00
+		{'Y', 'G', 'O'}, //A-02
+		{'W', 'G', 'R'}, //A-20
+		{'W', 'G', 'O'}, //A-22
+		
+		{'Y', 'B', 'R'}, //C-00
+		{'Y', 'B', 'O'}, //C-02
+		{'W', 'B', 'R'}, //C-20
+		{'W', 'B', 'O'} 
+	};
+	
 	public static int [][]  edges = new int[][]{
 		{21, 20}, //A-01
 		
@@ -107,7 +140,7 @@ public class Cubies {
 			//check centers
 			char center = cubeString.charAt(centers[i]);
 			if (center != centersColors[i]){
-				////System.out.println("Center color wrong: " + center + " " + i);
+				System.out.println("Center color wrong: " + center + " " + i);
 				return false;
 			}
 		}
@@ -122,8 +155,8 @@ public class Cubies {
 					cubeCorners[i] = j;
 					checkFaceRotation(cubeCornerFaces[i],i, j);
 					if (!checkFaceStickers(cubeCornerFaces[i], i, j)){
-						////System.out.print("stick swap check failed");
-						return false;
+						//System.out.print("stick swap check failed"); TODO
+						//return false;
 					}
 				}
 					
@@ -135,7 +168,6 @@ public class Cubies {
 			int curColor =0;
 			for (int j=0; j<6; j++){
 				if (edgesFace[i][j]!='0'){
-					//this is going wrong.
 					cubeEdgeFaces[i][j] = cubeString.charAt(edges[i][curColor]);
 					curColor++;
 				}
@@ -158,10 +190,10 @@ public class Cubies {
 			return false;
 		}
 		////System.out.println("cubeEdgeParity " +cubeEdgeParity);
-		if(cubeEdgeParity%2!=0){
+		/*if(cubeEdgeParity%2!=0){
 			System.out.print("dang edge Parity " + cubeEdgeParity);
 			return false;
-		}
+		}*/
 		////System.out.println("cubeCornerParity " + cubeCornerParity);
 		if (cubeCornerParity%3!=0){//corner parity check
 			System.out.print("dang corner Parity " + cubeCornerParity);
@@ -212,9 +244,9 @@ public class Cubies {
 			switch (origin){
 			case 0:{
 				if (cubieFaces[0]=='R')
-					cubeCornerParity+=1;
-				else if (cubieFaces[0]=='G')
 					cubeCornerParity+=2;
+				else if (cubieFaces[0]=='G')
+					cubeCornerParity+=1;
 				break;
 			}
 			case 1:{
@@ -233,9 +265,9 @@ public class Cubies {
 			}
 			case 3:{
 				if (cubieFaces[0]=='O')
-					cubeCornerParity+=1;
-				else if (cubieFaces[0]=='G')
 					cubeCornerParity+=2;
+				else if (cubieFaces[0]=='G')
+					cubeCornerParity+=1;
 				break;
 			}
 			case 4:{
@@ -247,16 +279,16 @@ public class Cubies {
 			}
 			case 5:{
 				if(cubieFaces[0]=='O')
-					cubeCornerParity+=1;
-				else if (cubieFaces[0] =='B')
 					cubeCornerParity+=2;
+				else if (cubieFaces[0] =='B')
+					cubeCornerParity+=1;
 				break;
 			}
 			case 6:{
 				if (cubieFaces[0]=='R')
-					cubeCornerParity+=1;
-				else if (cubieFaces[0]=='B')
 					cubeCornerParity+=2;
+				else if (cubieFaces[0]=='B')
+					cubeCornerParity+=1;
 				break;
 			}
 			case 7:{
@@ -269,8 +301,16 @@ public class Cubies {
 			default: 
 				System.out.println("Corner Parity went wrong");
 			}
-		}
+		}	
+		
 	}
+	private static char shiftBE(char[] cubieFaces){
+		return cubieFaces[1];
+	}
+	private static char shiftEB(char[] cubieFaces){
+		return cubieFaces[2];
+	}
+	
 	private static boolean checkFaceStickers(char[] cubieFaces, int currPos, int origin){
 		String faceStr = (new String(cubieFaces));
 		//////System.out.println(currPos + " " +origin);
