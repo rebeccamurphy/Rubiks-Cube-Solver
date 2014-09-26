@@ -1,7 +1,10 @@
 package rubik;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Cubies {
 	
@@ -71,14 +74,34 @@ public class Cubies {
 	public static char[] centersColors = new char[] {'Y', 'W', 'R','B', 'O', 'G'};
 	public static char[][]cubeCornerFaces =new char[8][3];
 	public static char[][]cubeEdgeFaces = new char[12][6];
-	public static HashMap ce= new HashMap();
+	public static HashMap<Integer, int[]> ce= new HashMap<Integer, int[]>();
+	
 	public static int cubeCorners[]= new int[8];
 	public static int cubeEdges[] = new int[12];
 	public static int cubeFlippedEdges =0;
 	public static int cubeFlippedCornerOrigin=0;
 	public static int cubeCornerParity=0;
 	public static int cubeEdgeParity=0;
+	static char[] cubieTest = new char[6];
+	private static void generateEdgeHashMap(){
+		ce.put(0, new int[]{0, 0,0});
+		ce.put(1, new int[]{0, 1, 0});
+		ce.put(2, new int[]{0, 1, 2});
+		ce.put(3, new int[]{0, 2, 1});
+		ce.put(4, new int[]{1, 0, 0});
+		ce.put(5, new int[]{1, 0, 2});
+		ce.put(6, new int[]{1, 2, 0});
+		ce.put(7, new int[]{1, 2, 2});
+		ce.put(8, new int[]{2, 0, 1});
+		ce.put(9, new int[]{2, 1, 0});
+		ce.put(10, new int[]{2, 1, 2});
+		ce.put(11, new int[]{2, 2, 1});
+	}
+	
 	public static boolean makeCube(String cubeString/*, char[][][] left, char[][][] middle, char[][][] right*/){
+		
+		generateEdgeHashMap();
+		
 		for (int i =0; i<6; i++ ){
 			//check centers
 			char center = cubeString.charAt(centers[i]);
@@ -97,14 +120,16 @@ public class Cubies {
 				if (checkFaces(cubeCornerFaces[i], cornersFaces[j])){
 					cubeCorners[i] = j;
 					checkFaceRotation(cubeCornerFaces[i],i, j);
-					if (!checkFaceStickers(cubeCornerFaces[i], i, j));
+					if (!checkFaceStickers(cubeCornerFaces[i], i, j)){
+						System.out.print("stick swap check failed");
 						return false;
+					}
 				}
 					
 			}
 		}
 		
-		//parse corners
+		//parse edges
 		for(int i=0; i<edges.length;i++){
 			int curColor =0;
 			for (int j=0; j<6; j++){
@@ -132,13 +157,15 @@ public class Cubies {
 		}
 		
 		System.out.println("cubeEdgeParity " +cubeEdgeParity);
-		if(cubeEdgeParity%2!=0){	
+		if(cubeEdgeParity%2!=0){
+			System.out.print("dang edge Parity " + cubeEdgeParity);
 			return false;
 		}
 		System.out.println("cubeCornerParity " + cubeCornerParity);
-		if (cubeCornerParity%3!=0)//corner parity check
+		if (cubeCornerParity%3!=0){//corner parity check
+			System.out.print("dang corner Parity " + cubeCornerParity);
 			return false;
-			
+		}
 		
 		return true;
 	}
@@ -198,25 +225,274 @@ public class Cubies {
 	
 	private static void checkEdgeRotation(char[]cubieFaces, int currCubeIndex){
 		char[] origin = new char[6];
+		int original =0;
 		for (int i=0; i<edgesFace.length; i++){
 			if (checkFaces(cubieFaces, edgesFace[i])){
 				origin = edgesFace[i];
+				original=i;
 				cubeEdges[currCubeIndex]=i;
 				//originNum=i;
 				break;
 			}
 		}
-		for(int j=0; j<origin.length; j++){
-			if (origin[j]!='0' && cubieFaces[j]!='0'){
-			//WRONG
-			//Have to account for edges differently. 
-				if (origin[j]==cubieFaces[j])
-					cubeEdgeParity+=0;
-				else
-					cubeEdgeParity++; //edge is incorrectly orientated
+		
+			
+		
+		simulateEdgeTurns(original, currCubeIndex);
+		
+	}
+	private static void simulateEdgeTurns(int origin, int currPos){
+		int x,y,z, xo, yo, zo, turnsBT =0, turnsR =0, turnsL =0;
+		/*xo= ce.get(origin)[0];
+		yo= ce.get(origin)[1];
+		zo= ce.get(origin)[2];
+		
+		x = ce.get(currPos)[0];
+		y = ce.get(currPos)[1];
+		z = ce.get(currPos)[2];
+		
+		turnsBT = Math.abs(xo-x);
+		if (y!=0 || y!=2){ //not top or bot turnable
+			//turn whatever side x is on to get it turnable
+			if (x==2)
+				turnsR++;
+			else
+				turnsL++;
+		}*/
+		int turnedCubePos=currPos;
+		int[] left = new int[] {0,1,2,3};
+		int[] right = new int [] {8,9,10,11};
+		int[] top = new int[] {0,4,5,8};
+		int[] bot = new int[] {3,6,7, 11};
+		char[] cubie = new char[6];
+		cubieTest = cubeEdgeFaces[currPos];
+		xo= ce.get(origin)[0];
+		yo= ce.get(origin)[1];
+		zo= ce.get(origin)[2];
+		while (origin!=turnedCubePos){
+		//	System.out.println("origin, turnpos " + origin +" " + turnedCubePos);
+			
+			x = ce.get(turnedCubePos)[0];
+			y = ce.get(turnedCubePos)[1];
+			z = ce.get(turnedCubePos)[2];
+			
+			turnsBT = Math.abs(xo-x);
+			//if the cube is already in the right x on the sides, turn until it is in position
+			if (turnsBT==0 &&(xo==0 ||xo==2)){
+			 	if (x==0)
+			 		turnedCubePos =turnLeft(turnedCubePos);
+			 	else if (x==2)
+			 		turnedCubePos =turnRight(turnedCubePos);
 			}
+			else if (xo==0||xo==2){ 
+				//not correct side x, so first we try to turn to see 
+				//if we can turn it in the top or bottom 
+				if (y==0)
+					turnedCubePos =turnTop(turnedCubePos);
+				else if (y==2){
+					turnedCubePos= turnBot(turnedCubePos);
+					if (origin==5)
+						System.out.println(turnedCubePos);
+				}
+				else if (y==1 && x==2)
+					turnedCubePos= turnRight(turnedCubePos);
+				else if (y==1 && x==0)
+					turnedCubePos = turnLeft(turnedCubePos);
+			}
+			else if (turnsBT==0 && xo==1){
+				//now we look at the front and back edge cubes
+				if (y==0) //in correct 
+					turnedCubePos= turnTop(turnedCubePos);
+				else if (y==2)
+					turnedCubePos= turnBot(turnedCubePos);
+				
+			}
+			else if (xo==1){
+				if (x==0 && yo!=y) //need to get it to the top or bot
+					turnedCubePos = turnLeft(turnedCubePos);
+				else if (yo==y && y==0) //need to be it back to right top pos
+					turnedCubePos= turnTop(turnedCubePos);
+				else if (x==2 && yo!=y)
+					turnedCubePos = turnRight(turnedCubePos);
+				else if (yo==y && y==2)
+					turnedCubePos= turnBot(turnedCubePos);
+			}
+			
+		}
+		if (!(new String(edgesFace[origin])).equals(new String(cubieTest))){
+			System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
+			System.out.println("Origin " + origin + " currpos " + currPos);
+			cubeEdgeParity++;
+		}
+	}
+	private static int turnRight(int currPos){
+		List<Integer> right = Arrays.asList(8,9,11,10);
+		int nextPos;
+		char temp;
+		if (right.indexOf(currPos) ==3){
+			nextPos= right.get(0);
+		}
+		else
+			nextPos = right.get(right.indexOf(currPos)+1);
+		switch (nextPos){
+		case 8:{
+			//switch S and T
+			temp= cubieTest[0];
+			cubieTest[0]=cubieTest[4];
+			cubieTest[4]= temp;
+			break;
+		}
+		case 9:{
+			//switch T and N
+			temp = cubieTest[0];
+			cubieTest[0] = cubieTest[2];
+			cubieTest[2] = temp;
+			break;
+			}
+		case 10:{
+			//switch B and S
+			temp = cubieTest[4];
+			cubieTest[4] = cubieTest[1];
+			cubieTest[1] = temp;
+			break;
+		}
+		case 11:{
+			//switch N and B
+			temp = cubieTest[1];
+			cubieTest[1] = cubieTest[2];
+			cubieTest[2] = temp;
+			break;
 		}
 		
+		}
+		return nextPos;
+	}
+	private static int turnLeft(int currPos){
+		List<Integer> left = Arrays.asList(0,1,3,2);
+		int nextPos;
+		char temp;
+		if (left.indexOf(currPos) ==3)
+			nextPos= left.get(0);
+		else
+			nextPos= left.get(left.indexOf(currPos)+1);
+		switch(nextPos){
+		//same as right
+			case 0:{
+				//switch S and T
+				temp= cubieTest[0];
+				cubieTest[0]=cubieTest[4];
+				cubieTest[4]= temp;
+				break;
+			}
+			case 1:{
+				//switch T and N
+				temp = cubieTest[0];
+				cubieTest[0] = cubieTest[2];
+				cubieTest[2] = temp;
+				break;
+				}
+			case 2:{
+				//switch B and S
+				temp = cubieTest[4];
+				cubieTest[4] = cubieTest[1];
+				cubieTest[1] = temp;
+				break;
+			}
+			case 3:{
+				//switch N and B
+				temp = cubieTest[1];
+				cubieTest[1] = cubieTest[2];
+				cubieTest[2] = temp;
+				break;
+			}
+				
+		}
+		
+		return nextPos;
+	}
+	private static int turnTop(int currPos){
+		List<Integer> top = Arrays.asList(0, 4, 8, 5);
+		//System.out.println(currPos);
+		int nextPos;
+		char temp;
+		if (top.indexOf(currPos) ==3)
+			nextPos= top.get(0);
+		else
+			nextPos = top.get(top.indexOf(currPos)+1);
+		switch(nextPos){
+		
+			case 0:{
+				//switch S and W
+				temp= cubieTest[4];
+				cubieTest[4]=cubieTest[3];
+				cubieTest[3]= temp;
+				break;
+			}
+			case 4:{
+				//switch W and N
+				temp = cubieTest[5];
+				cubieTest[5] = cubieTest[2];
+				cubieTest[2] = temp;
+				break;
+				}
+			case 5:{
+				//switch E and S
+				temp = cubieTest[3];
+				cubieTest[3] = cubieTest[4];
+				cubieTest[4] = temp;
+				break;
+			}
+			case 8:{
+				//switch N and E
+				temp = cubieTest[2];
+				cubieTest[2] = cubieTest[3];
+				cubieTest[3] = temp;
+				break;
+			}
+		}
+		return nextPos;
+	}
+	private static int turnBot(int currPos){
+		List<Integer> bot = Arrays.asList(3, 6, 11, 7);
+		int nextPos;
+		char temp;
+		if (bot.indexOf(currPos) ==3)
+			nextPos= bot.get(0);
+		else
+			nextPos= bot.get(bot.indexOf(currPos)+1);
+		
+		switch(nextPos){
+		
+		case 3:{
+			//switch S and W
+			temp= cubieTest[4];
+			cubieTest[4]=cubieTest[3];
+			cubieTest[3]= temp;
+			break;
+		}
+		case 6:{
+			//switch W and N
+			temp = cubieTest[5];
+			cubieTest[5] = cubieTest[2];
+			cubieTest[2] = temp;
+			break;
+			}
+		case 7:{
+			//switch E and S
+			temp = cubieTest[3];
+			cubieTest[3] = cubieTest[4];
+			cubieTest[4] = temp;
+			break;
+		}
+		case 11:{
+			//switch N and E
+			temp = cubieTest[2];
+			cubieTest[2] = cubieTest[3];
+			cubieTest[3] = temp;
+			break;
+		}
+	}
+	return nextPos;
 	}
 	private static int getInvCount(int arr[])
 	{
