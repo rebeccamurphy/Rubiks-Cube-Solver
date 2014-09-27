@@ -23,7 +23,7 @@ public class Solvable {
 	        else{
 	        	//System.out.println("WXY".contains("YXW"));
 	        	//System.out.println("Invalid File Name");
-	        	runAll(new File ("/home/rebecca/Documents/RubiksCubeStates-master/valid/"));
+	        	runAll(new File ("/home/rebecca/Documents/RubiksCubeStates-master/invalid/"));
 	        }
 	    }
 	 public static String readFile(String path) 

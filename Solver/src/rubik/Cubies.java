@@ -190,10 +190,11 @@ public class Cubies {
 			return false;
 		}
 		////System.out.println("cubeEdgeParity " +cubeEdgeParity);
+		/*
 		if(cubeEdgeParity%2!=0){
 			System.out.print("dang edge Parity " + cubeEdgeParity);
 			return false;
-		}
+		}*/
 		////System.out.println("cubeCornerParity " + cubeCornerParity);
 		if (cubeCornerParity%3!=0){//corner parity check
 			System.out.print("dang corner Parity " + cubeCornerParity);
@@ -350,7 +351,6 @@ public class Cubies {
 			else
 				turnsL++;
 		}*/
-
 		int turnedCubePos=currPos;
 		int[] left = new int[] {0,1,2,3};
 		int[] right = new int [] {8,9,10,11};
@@ -362,9 +362,7 @@ public class Cubies {
 		yo= ce.get(origin)[1];
 		zo= ce.get(origin)[2];
 		int turnsY =0;
-
-		System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
-		System.out.println("Origin " + origin + " currpos " + currPos);
+		
 		//	////System.out.println("origin, turnpos " + origin +" " + turnedCubePos);
 			
 			x = ce.get(turnedCubePos)[0];
@@ -377,7 +375,7 @@ public class Cubies {
 				//TOP X Y
 				if (!(('Y' == cubieTest[0] || 'Y'== cubieTest[1]))){
 					//An edge with a X side is oriented correctly if the X side is next to an X center
-					if (!(('Y'==cubieTest[2] || 'Y'==cubieTest[4])&& x!=1)){
+					if (!('Y'==cubieTest[2] || 'Y'==cubieTest[4])){
 						//tests if position would be correct if 
 						//if the edge is in the middle layer and would become correctly oriented 
 						//by a quarter turn of the Y
@@ -394,7 +392,7 @@ public class Cubies {
 				//BOT X-Z
 				if (!(('W' == cubieTest[0] || 'W'== cubieTest[1]))){
 					//An edge with a X side is oriented correctly if the X side is next to an X center
-					if (!(('W'==cubieTest[2] || 'W'==cubieTest[4])&& x!=1)){
+					if (!('W'==cubieTest[2] || 'W'==cubieTest[4])){
 						//tests if position would be correct if 
 						//if the edge is in the middle layer and would become correctly oriented 
 						//by a quarter turn of the Y
@@ -409,9 +407,9 @@ public class Cubies {
 			
 			if (origin==1 || origin==9){
 				//char northTest =edgesFace[origin][2];
-				if (!((cubieTest[0]=='R'||cubieTest[1]=='R'||cubieTest[2]=='R')||
-						(new String(cubieTest)).equals(new String(edgesFace[origin])))||
-						(cubieTest[4]=='R' && x!=1)){
+				if (!(cubieTest[0]=='R'||cubieTest[1]=='R'||cubieTest[2]=='R'||
+						(new String(cubieTest)).equals(new String(edgesFace[origin])))
+						){
 					cubeEdgeParity++;
 				System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
 				System.out.println("Origin " + origin + " currpos " + currPos);
@@ -419,8 +417,8 @@ public class Cubies {
 					
 			}
 			if (origin==2 || origin==10){
-				if (!((cubieTest[0]=='O'||cubieTest[1]=='O'||(cubieTest[4]=='O')||
-						(new String(cubieTest)).equals(new String(edgesFace[origin]))) ||
+				if (!(cubieTest[0]=='O'||cubieTest[1]=='O'||(cubieTest[4]=='O')||
+						(new String(cubieTest)).equals(new String(edgesFace[origin]))||
 						(cubieTest[2]=='O' && x!=1) )){
 					cubeEdgeParity++;
 
