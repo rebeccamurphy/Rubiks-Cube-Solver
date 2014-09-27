@@ -1,11 +1,15 @@
 package rubik;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
+/***
+ * This code is horrible looking. Please do not actually try to read it. 
+ * I swear I started this assignment a week or more in advance and I still couldn't understand edge parity.
+ * @author Rebecca
+ *
+ */
 public class Cubies {
 	/*
 	static int[][] corners =new int[][]{
@@ -135,12 +139,23 @@ public class Cubies {
 		cubeCornerParity=0;
 		cubeEdgeParity=0;
 		generateEdgeHashMap();
-		
+		int counter=0;
+		for (int j=0; j<centersColors.length; j++){
+			//check for right amount of colors
+			counter=0;
+			for( int i=0; i<cubeString.length(); i++ ) {
+			    if( cubeString.charAt(i) == centersColors[j] ) {
+			        counter++;
+			    } 
+			}
+			if (counter > 9)
+				return false;
+		}
 		for (int i =0; i<6; i++ ){
 			//check centers
 			char center = cubeString.charAt(centers[i]);
 			if (center != centersColors[i]){
-				System.out.println("Center color wrong: " + center + " " + i);
+				//System.out.println("Center color wrong: " + center + " " + i);
 				return false;
 			}
 		}
@@ -162,7 +177,7 @@ public class Cubies {
 					
 			}
 		}
-		//System.out.println( new String(cubeEdgeFaces[4]));
+		
 		//parse edges
 		for(int i=0; i<edges.length;i++){
 			int curColor =0;
@@ -175,41 +190,32 @@ public class Cubies {
 					cubeEdgeFaces[i][j] = '0';
 			}
 			checkEdgeRotation(cubeEdgeFaces[i], i);
-		}	
-		/*
-		////System.out.println((getInvCount(cubeEdges)+getInvCount(cubeCorners)));
-		for (int i=0; i<cubeEdges.length; i++)
-			////System.out.print(cubeEdges[i] +" ");
-		////System.out.println();
-		for (int i=0; i<cubeCorners.length; i++)
-			////System.out.print(cubeCorners[i] +" ");*/
+		}
 		if (((getInvCount(cubeEdges)+getInvCount(cubeCorners)) %2 != 0)){
 			//permutation check
 			System.out.println("Corners swapped illegally " + getInvCount(cubeCorners));
 			System.out.println("Edges swapped illegally " + getInvCount(cubeEdges));
 			return false;
 		}
-		////System.out.println("cubeEdgeParity " +cubeEdgeParity);
 		/*
 		if(cubeEdgeParity%2!=0){
 			System.out.print("dang edge Parity " + cubeEdgeParity);
 			return false;
 		}*/
-		////System.out.println("cubeCornerParity " + cubeCornerParity);
+		
 		if (cubeCornerParity%3!=0){//corner parity check
-			System.out.print("dang corner Parity " + cubeCornerParity);
 			return false;
 		}
 		
 		return true;
 	}
-	public static boolean checkValid(String cubeString/*char[][] left, char[][] middle, char[][] right*/){
+	public static boolean checkValid(String cubeString){
 		return makeCube(cubeString);
 	}
 	private static boolean checkFaces(char[] cubie, char[] defaultCubieFaces){
 		for(int i =0; i< cubie.length; i++){
 			if ((new String (defaultCubieFaces)).indexOf(cubie[i])==-1){
-				//////System.out.println(new String(cubie) + " " + new String(defaultCubieFaces));
+				
 				return false;
 			}
 		}
@@ -281,7 +287,7 @@ public class Cubies {
 				break;
 			}
 			default: 
-				System.out.println("Corner Parity went wrong");
+				//System.out.println("Corner Parity went wrong");
 			}
 		}	
 		
@@ -328,29 +334,14 @@ public class Cubies {
 			}
 		}
 		
-			
 		
 		simulateEdgeTurns(original, currCubeIndex);
 		
 	}
 	private static void simulateEdgeTurns(int origin, int currPos){
+		//I just couldn't get parity working
 		int x,y,z, xo, yo, zo, turnsBT =0, turnsR =0, turnsL =0;
-		/*xo= ce.get(origin)[0];
-		yo= ce.get(origin)[1];
-		zo= ce.get(origin)[2];
 		
-		x = ce.get(currPos)[0];
-		y = ce.get(currPos)[1];
-		z = ce.get(currPos)[2];
-		
-		turnsBT = Math.abs(xo-x);
-		if (y!=0 || y!=2){ //not top or bot turnable
-			//turn whatever side x is on to get it turnable
-			if (x==2)
-				turnsR++;
-			else
-				turnsL++;
-		}*/
 		int turnedCubePos=currPos;
 		int[] left = new int[] {0,1,2,3};
 		int[] right = new int [] {8,9,10,11};
@@ -382,8 +373,8 @@ public class Cubies {
 						//if not edge is not correctly oriented
 						cubeEdgeParity++;
 
-						System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
-						System.out.println("Origin " + origin + " currpos " + currPos);
+						//System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
+						//System.out.println("Origin " + origin + " currpos " + currPos);
 					}
 				}
 				
@@ -399,8 +390,8 @@ public class Cubies {
 						//if not edge is not correctly oriented
 						cubeEdgeParity++;
 
-						System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
-						System.out.println("Origin " + origin + " currpos " + currPos);
+						//System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
+						//System.out.println("Origin " + origin + " currpos " + currPos);
 					}
 				}
 			}
@@ -411,8 +402,8 @@ public class Cubies {
 						(new String(cubieTest)).equals(new String(edgesFace[origin])))
 						){
 					cubeEdgeParity++;
-				System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
-				System.out.println("Origin " + origin + " currpos " + currPos);
+				//System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
+				//System.out.println("Origin " + origin + " currpos " + currPos);
 				}
 					
 			}
@@ -422,14 +413,11 @@ public class Cubies {
 						(cubieTest[2]=='O' && x!=1) )){
 					cubeEdgeParity++;
 
-				System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
-				System.out.println("Origin " + origin + " currpos " + currPos);
+				//System.out.println("Origin: "+ (new String(edgesFace[origin])) +" TurnedPos: " + (new String(cubieTest)));  
+				//System.out.println("Origin " + origin + " currpos " + currPos);
 				}
 
 			}
-			
-		
-		
 	}
 	private static int turnRight(int currPos){
 		List<Integer> right = Arrays.asList(8,9,11,10);
