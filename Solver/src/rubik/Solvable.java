@@ -13,6 +13,10 @@ public class Solvable {
 	            System.out.println(Cubies.checkValid(strFile));
 	            
 	        }
+	        else{
+	        	Cube demo = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBGGGYYYBBBOOOOOOOOOWWWWWWWWW");
+	        }
+	        	
 	        
 	    }
 	 public static String readFile(String path) 

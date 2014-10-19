@@ -5,41 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 /***
- * This code is horrible looking. Please do not actually try to read it. 
- * I swear I started this assignment a week or more in advance and I still couldn't understand edge parity.
  * @author Rebecca
  *
  */
 public class Cubies {
-	/*
-	static int[][] corners =new int[][]{
-		//starting 0,0
-		//X  Y  Z
-		{12, 6, 11}, //A-00
-		{30, 36, 29},//A-02
-		
-		{51, 0, 9 }, //A-20
-		{45, 42, 27},//A-22
-		
-		{14, 8, 15}, //C-00
-		{32, 33, 38},//C-02
-		
-		{53, 2, 17}, //C-20
-		{47, 35, 44} //C-22
-	};
-	static char[][] cornersFaces = new char[][]{
-		//X=Y,W; Y=G,B, Z =O,R
-		//X    Y    Z
-		{'Y', 'R', 'G'}, //A-00
-		{'Y', 'O', 'G'}, //A-02
-		{'W', 'R', 'G'}, //A-20
-		{'W', 'O', 'G'}, //A-22
-		
-		{'Y', 'R', 'B'}, //C-00
-		{'Y', 'B', 'O'}, //C-02
-		{'W', 'R', 'B'}, //C-20
-		{'W', 'B', 'O'}
-	};*/
+	
 
 	static int[][] corners =new int[][]{
 		//starting 0,0
@@ -120,8 +90,9 @@ public class Cubies {
 	public static int cubeCornerParity=0;
 	public static int cubeEdgeParity=0;
 	static char[] cubieTest = new char[6];
+	
 	private static void generateEdgeHashMap(){
-		ce.put(0, new int[]{0, 0,0});
+		ce.put(0, new int[]{0, 0, 0});
 		ce.put(1, new int[]{0, 1, 0});
 		ce.put(2, new int[]{0, 1, 2});
 		ce.put(3, new int[]{0, 2, 1});
