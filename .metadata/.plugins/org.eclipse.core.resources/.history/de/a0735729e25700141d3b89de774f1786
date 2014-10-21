@@ -1,0 +1,141 @@
+package rubik;
+
+import java.util.HashMap;
+
+public class Cube {
+
+	static int[][] corners =new int[][]{
+		//starting 0,0
+		//X  Y  Z
+		{12, 11, 6}, //A-00
+		{30, 29, 36},//A-02
+		
+		{51, 9, 0 }, //A-20
+		{45, 27, 42},//A-22
+		
+		{14, 15, 8}, //C-00
+		{32, 33, 38},//C-02
+		
+		{53, 17, 2}, //C-20
+		{47, 35, 44} //C-22
+	};
+	static char[][] cornersFaces = new char[][]{
+		//X=Y,W; Y=G,B, Z =O,R
+		//X    Y    Z
+		{'Y', 'G', 'R'}, //A-00
+		{'Y', 'G', 'O'}, //A-02
+		{'W', 'G', 'R'}, //A-20
+		{'W', 'G', 'O'}, //A-22
+		
+		{'Y', 'B', 'R'}, //C-00
+		{'Y', 'B', 'O'}, //C-02
+		{'W', 'B', 'R'}, //C-20
+		{'W', 'B', 'O'} 
+	};
+	
+	public static int [][]  edges = new int[][]{
+		{21, 20}, //A-01
+		
+		{3, 10},  //A-10
+		{39, 28}, //A-12
+		
+		{48, 18}, //A-21
+		
+		{13, 7},  //B-00
+		{31, 37}, //B-02
+		
+		{52, 1},  //B-20
+		{46, 43}, //B-22
+		
+		{23, 24}, //C-01
+		
+		{5, 16},  //C-10
+		{34, 41}, //C-12
+		
+		{50, 26}, //C-21
+	};
+	public static char[][] edgesFace = new char[][]{
+		{'Y','0','0','0','0','G'},	//A-01
+		{'0','0','R','0','0','G'}, //A-10
+		{'0','0','0','0','O','G'}, //A-12
+		{'0','W','0','0','0','G'}, //A-21
+		
+		{'Y','0','R','0','0','0'}, //B-00
+		{'Y','0','0','0','O','0'}, //B-02
+		{'0','W','R','0','0','0'}, //B-20
+		{'0','W','0','0','O','0'}, //B-22
+		
+		{'Y','0','0','B','0','0'}, //C-01
+		{'0','0','R','B','0','0'}, //C-10
+		{'0','0','0','B','O','0'}, //C-12
+		{'0','W','0','B','0','0',}, //C-21
+	};
+	public static int[] centers = new int[] {22, 49, 4,25, 40, 19};
+	public static char[] centersColors = new char[] {'Y', 'W', 'R','B', 'O', 'G'};
+	public static char[][]cubeCornerFaces =new char[8][3];
+	public static char[][]cubeEdgeFaces = new char[12][6];
+	public static HashMap<Integer, int[]> ce= new HashMap<Integer, int[]>();
+	
+	public static int cubeCorners[]= new int[8];
+	public static int cubeEdges[] = new int[12];
+	static char[] cubieTest = new char[6];
+	
+	private static void generateEdgeHashMap(){
+		ce.put(0, new int[]{0, 0, 0});
+		ce.put(1, new int[]{0, 1, 0});
+		ce.put(2, new int[]{0, 1, 2});
+		ce.put(3, new int[]{0, 2, 1});
+		ce.put(4, new int[]{1, 0, 0});
+		ce.put(5, new int[]{1, 0, 2});
+		ce.put(6, new int[]{1, 2, 0});
+		ce.put(7, new int[]{1, 2, 2});
+		ce.put(8, new int[]{2, 0, 1});
+		ce.put(9, new int[]{2, 1, 0});
+		ce.put(10, new int[]{2, 1, 2});
+		ce.put(11, new int[]{2, 2, 1});
+	}
+	
+	
+	public static void makeCube(String cubeString){
+		cubeCornerParity=0;
+		cubeEdgeParity=0;
+		generateEdgeHashMap();
+		
+		for (int i =0; i< corners.length; i++){
+			//check corners for sticker swap
+			cubeCornerFaces[i][0] = cubeString.charAt(corners[i][0]);
+			cubeCornerFaces[i][1] = cubeString.charAt(corners[i][1]);
+			cubeCornerFaces[i][2] = cubeString.charAt(corners[i][2]);
+			
+			for(int j=0; j< cornersFaces.length; j++){
+				if (checkFaces(cubeCornerFaces[i], cornersFaces[j])){
+					cubeCorners[i] = j;
+					
+				}
+					
+			}
+		}
+		
+		//parse edges
+		for(int i=0; i<edges.length;i++){
+			int curColor =0;
+			for (int j=0; j<6; j++){
+				if (edgesFace[i][j]!='0'){
+					cubeEdgeFaces[i][j] = cubeString.charAt(edges[i][curColor]);
+					curColor++;
+				}
+				else 
+					cubeEdgeFaces[i][j] = '0';
+			}
+		}
+		
+	}
+	private static boolean checkFaces(char[] cubie, char[] defaultCubieFaces){
+		for(int i =0; i< cubie.length; i++){
+			if ((new String (defaultCubieFaces)).indexOf(cubie[i])==-1){
+				return false;
+			}
+		}
+		return true;
+	}
+}

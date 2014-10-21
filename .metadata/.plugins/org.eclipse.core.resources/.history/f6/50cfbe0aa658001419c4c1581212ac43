@@ -1,0 +1,28 @@
+package rubik;
+
+public class CubeNode {
+
+	/**
+	 * The state of the cube
+	 */
+
+	public String state;
+	/**
+	 * The heuristic value
+	 */
+	public int heuristic;
+
+	/**
+	 *
+	 * @param state the state of the cube
+	 * @param heuristic the heuristic value
+	 */
+	public CubeNode(String state, int heuristic) {
+		this.state = state;
+		this.heuristic = heuristic;
+	}
+
+
+
+	
+}
