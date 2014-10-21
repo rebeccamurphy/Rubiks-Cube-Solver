@@ -109,7 +109,7 @@ public class Cube {
 	
 	public String firstState;
 	
-	static ArrayList<char[]> cornerValues= new ArrayList<char[]>();
+	static ArrayList<char[]> cornerValues;
 	
 	HashMap<Integer, char[]> edgeValues;
 	
@@ -117,7 +117,7 @@ public class Cube {
 		firstState =input;
 		
 		makeCube(input);
-		initCornerValues();
+		
 		//System.out.println(encodeCorners(cubeCornersMap));
 	}
 	
@@ -154,8 +154,9 @@ public class Cube {
 		
 	}
 
-	public void initCornerValues(){
+	public static void initCornerValues(){
 		//pattern is XYZ, ZXY, YZX
+		cornerValues= new ArrayList<char[]>();
 		cornerValues.add(new char[] {'Y','G','R'}); //0
 		cornerValues.add(new char[] {'R', 'Y', 'G'});//1
 		cornerValues.add(new char[] {'G', 'R', 'Y'});//2
@@ -419,34 +420,42 @@ public class Cube {
 		return result;
 	}
 	
-	public static int encodeCorners (HashMap<Integer, char[]> state){
-		int result =0;
-		ArrayList<char[]> cornerValuesCopy = new ArrayList<char[]>(cornerValues);
+	public static long encodeCorners (HashMap<Integer, char[]> state){
+		long result =0;
+		initCornerValues();
+		//ArrayList<char[]> cornerValuesCopy = new ArrayList<char[]>(cornerValues);
 		for (int i=0; i< state.size(); i++){
 			int ortVal =0; //orientation value
 			char[] cubie = state.get(i);
-			int indexOfCubies = findCubie(cubie, cornerValuesCopy);
-			System.out.println(indexOfCubies);
+			int indexOfCubies = findCubie(cubie, cornerValues);
+			if (indexOfCubies<0){
+				System.out.println(indexOfCubies);
+			}
+			//System.out.println(indexOfCubies);
 			for(int j=0; j<3; j++){
 				//get find the value of the cubie's orientation, by comparing the first char in the orientation
-				if (  (cornerValuesCopy.get(indexOfCubies+j))[0] == cubie[0]){
+				if (  (cornerValues.get(indexOfCubies+j))[0] == cubie[0]){
 					ortVal = indexOfCubies+j;
 					break;
 				}
 			}
-			//multiple ortVal by the size of cornerValues
-			result += ortVal * factorial(cornerValuesCopy.size());
 			//remove cube orientation values from cornerValues 
 			for (int j=0; j<3; j++){
 				//remove i (first instance of cubie) 3 times
-				cornerValuesCopy.remove(indexOfCubies);
+				cornerValues.remove(indexOfCubies);
 			}
+
+			//multiple ortVal by the size of cornerValues
+			System.out.println(i+" " + ortVal +" "+ cornerValues.size());
+			result += ortVal * factorial(cornerValues.size());
 			
 		}
 		if (result<0){
 			for (int i=0; i<state.size(); i++)
-				System.out.println(new String (state.get(i)));
+				System.out.println(result +" "+ new String (state.get(i)));
+			System.exit(0);
 		}
+		System.out.println(result);
 		return result;
 	}
 	
