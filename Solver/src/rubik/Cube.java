@@ -116,6 +116,8 @@ public class Cube {
 	static List<char[]> edgeValues1; //6-11
 	static HashMap<String, Integer> goalEdges;
 	
+	public static int limit =0;
+	
 	public Cube(String input){
 		firstState =input;
 		goalEdges=initGoalEdges();
@@ -628,13 +630,24 @@ public class Cube {
 	}
 	
 	public static String encodeEdges(HashMap<Integer, char[]> state){
-		HashMap<Integer, Integer> mappedEdges = mapEdges(state);
+		/*HashMap<Integer, Integer> mappedEdges = mapEdges(state);
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < mappedEdges.size(); i++) {
 			
 			builder.append(mappedEdges.get(i));
 		}
 		return builder.toString();
+		*/
+		if (limit<10000){
+			limit+=1;
+			System.out.println(limit);
+			return ""+limit;
+			
+		}
+		else{
+			System.out.println(limit);
+			return "0";
+		}
 	}
 	private static HashMap<Integer, Integer> mapEdges(HashMap<Integer, char[]> state) {
 		for (int i=0; i<12; i++)
