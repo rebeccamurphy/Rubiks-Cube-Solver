@@ -40,8 +40,8 @@ public class Cube {
 	public static int [][]  edges = new int[][]{
 		{21, 20}, //A-01
 		
-		{3, 10},  //A-10
-		{39, 28}, //A-12
+		{10, 3},  //A-10
+		{28, 39}, //A-12
 		
 		{48, 18}, //A-21
 		
@@ -53,7 +53,7 @@ public class Cube {
 		
 		{23, 24}, //C-01
 		
-		{5, 16},  //C-10
+		{16, 5},  //C-10
 		{34, 41}, //C-12
 		
 		{50, 26}, //C-21
@@ -124,6 +124,7 @@ public class Cube {
 		makeCube(input);
 		
 		//System.out.println(encodeCorners(cubeCornersMap));
+		
 	}
 	
 	
@@ -349,7 +350,7 @@ public class Cube {
 						int newPos = (i==3)? faceWC[0] :faceWC[i+1];
 						if (state.containsKey(currPos)){
 						char[] tempCube = state.get(currPos);
-						cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+							cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
 						}
 
 					}
@@ -362,7 +363,7 @@ public class Cube {
 						int newPos = (i==3)? faceRC[0] :faceRC[i+1];
 						if (state.containsKey(currPos)){
 							char[] tempCube = state.get(currPos);
-							cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+							cubeCornersMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
 						}
 					}
 					break;
@@ -374,7 +375,7 @@ public class Cube {
 						int newPos = (i==3)? faceBC[0] :faceBC[i+1];
 						if (state.containsKey(currPos)){
 							char[] tempCube = state.get(currPos);
-							cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+							cubeCornersMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
 						}
 	
 					}
@@ -387,7 +388,7 @@ public class Cube {
 						int newPos = (i==3)? faceOC[0] :faceOC[i+1];
 						if (state.containsKey(currPos)){
 							char[] tempCube = state.get(currPos);
-							cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+							cubeCornersMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
 					
 						}
 					}
@@ -400,7 +401,7 @@ public class Cube {
 						int newPos = (i==3)? faceGC[0] :faceGC[i+1];
 						if (state.containsKey(currPos)){
 							char[] tempCube = state.get(currPos);
-							cubeCornersMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+							cubeCornersMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
 						}
 					
 					}
@@ -414,31 +415,15 @@ public class Cube {
 			int currPos=0, newPos=0;
 			char[] tempCube;
 
-			System.out.println("before turn size "+state.size());
-			System.out.println(cubeEdgesMapCopy.size());
 			switch (face){
-				case 'Y':{
-					for (int i=0; i<12; i++)
-						if (cubeEdgesMapCopy.containsKey(i))
-						System.out.println(new String (cubeEdgesMapCopy.get(i)));
-					
-					
+				case 'Y':{				
 					for (int i=0; i<4; i++){
-						
 						currPos =faceYE[i];
 						newPos = (i==3)? faceYE[0] :faceYE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
 						tempCube = state.get(currPos);
 						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
-					}
-					System.out.println("after turn size "+cubeEdgesMapCopy.size());
-					for (int i=0; i<12; i++)
-						if (cubeEdgesMapCopy.containsKey(i))
 						
+					}
 					break;
 				}
 				case 'W':{
@@ -446,14 +431,10 @@ public class Cube {
 						
 						currPos =faceWE[i];
 						newPos = (i==3)? faceWE[0] :faceWE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
-							tempCube = state.get(currPos);
-							cubeEdgesMapCopy.remove(currPos);
-							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
+					
+						tempCube = state.get(currPos);
+						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
+						
 					}
 					break;
 				}
@@ -463,14 +444,11 @@ public class Cube {
 	
 						currPos =faceRE[i];
 						newPos = (i==3)? faceRE[0] :faceRE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
+						
 							tempCube = state.get(currPos);
 							//cubeEdgesMapCopy.remove(currPos);
-							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
+							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
+						
 					}
 					break;
 				}
@@ -479,14 +457,10 @@ public class Cube {
 		
 						currPos =faceBE[i];
 						newPos = (i==3)? faceBE[0] :faceBE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
-							tempCube = state.get(currPos);
-							cubeEdgesMapCopy.remove(currPos);
-							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
+					
+						tempCube = state.get(currPos);
+						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
+						
 					}
 					break;
 				}
@@ -495,14 +469,11 @@ public class Cube {
 												
 						currPos =faceOE[i];
 						newPos = (i==3)? faceOE[0] :faceOE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
+						
 							tempCube = state.get(currPos);
 						//	cubeEdgesMapCopy.remove(currPos);
-							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
+							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
+						
 					}
 					break;
 				}
@@ -511,25 +482,15 @@ public class Cube {
 						
 						currPos =faceGE[i];
 						newPos = (i==3)? faceGE[0] :faceGE[i+1];
-						if (state.containsKey(newPos)){
-							cubeEdgesMapCopy.remove(newPos);
-						}
-						if (state.containsKey(currPos)){
+						
 							tempCube = state.get(currPos);
 							//cubeEdgesMapCopy.remove(currPos);
-							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						}
+							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
+						
 					}
 					break;
 				}
 			}
-
-			System.out.println("turn size after: " + face +" "+cubeEdgesMapCopy.size());
-			System.out.println();
-			for (int i=0; i<12; i++)
-				if (cubeEdgesMapCopy.containsKey(i))
-				System.out.println(new String (cubeEdgesMapCopy.get(i)));
-			System.out.println();
 			return cubeEdgesMapCopy;
 		}
 
@@ -590,10 +551,11 @@ public class Cube {
 		return result;
 	}
 	
-	public static long encodeCorners (HashMap<Integer, char[]> state){
+	public static int encodeCorners (HashMap<Integer, char[]> state){
 		long result =0;
 		initCornerValues();
 		//ArrayList<char[]> cornerValuesCopy = new ArrayList<char[]>(cornerValues);
+		/*
 		for (int i=0; i< state.size(); i++){
 			int ortVal =0; //orientation value
 			char[] cubie = state.get(i);
@@ -627,6 +589,17 @@ public class Cube {
 		}
 		System.out.println(result);
 		return result;
+		*/
+		if (limit<10000){
+			limit+=1;
+			System.out.println(limit);
+			return limit;
+			
+		}
+		else{
+			System.out.println(limit);
+			return 0;
+		}
 	}
 	
 	public static String encodeEdges(HashMap<Integer, char[]> state){

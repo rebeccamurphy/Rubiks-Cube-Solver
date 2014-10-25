@@ -7,8 +7,8 @@ public class CubeNode {
 	/**
 	 * The state of the cube
 	 */
-
 	public  HashMap<Integer,char[]>  state;
+
 	/**
 	 * The heuristic value
 	 */
