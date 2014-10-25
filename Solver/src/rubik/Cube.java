@@ -37,7 +37,7 @@ public class Cube {
 		{'W', 'B', 'O'} //
 	};
 	
-	public static int [][]  edges = new int[][]{
+	public final static int [][]  edges = new int[][]{
 		{21, 20}, //A-01
 		
 		{10, 3},  //A-10
@@ -58,7 +58,7 @@ public class Cube {
 		
 		{50, 26}, //C-21
 	};
-	public static char[][] edgesFace = new char[][]{
+	public final static char[][] edgesFace = new char[][]{
 		//X, Y, Z
 		{'Y','G','0'},	//A-01
 		{'0','G','R'}, //A-10
@@ -78,12 +78,12 @@ public class Cube {
 	public static int[] centers = new int[] {22, 49, 4,25, 40, 19};
 	public static char[] centersColors = new char[] {'Y', 'W', 'R','B', 'O', 'G'};
 	
-	public static char[][]cubeCornerFaces =new char[8][3];
-	public static char[][]cubeEdgeFaces = new char[12][6];
+	public char[][]cubeCornerFaces =new char[8][3];
+	public char[][]cubeEdgeFaces = new char[12][6];
 	public static HashMap<Integer, int[]> ce= new HashMap<Integer, int[]>();
 	
-	public static HashMap<Integer,char[]> cubeCornersMap = new HashMap <Integer, char[] > ();
-	public static HashMap<Integer, char[]> cubeEdgesMap = new HashMap <Integer, char[] > ();
+	public HashMap<Integer,char[]> cubeCornersMap = new HashMap <Integer, char[] > ();
+	public HashMap<Integer, char[]> cubeEdgesMap = new HashMap <Integer, char[] > ();
 	
 	public static final char[] FACES = {'Y', 'W', 'R', 'B', 'O', 'G'}; 
 	
@@ -91,23 +91,23 @@ public class Cube {
 	public static  int[] cubeEdges = new int[12];
 	//indexes of cubes in theses faces, first char = color, second = corner or edge
 	//order dependent upon view of face
-	static int[] faceYC = {0, 4, 5, 1};
-	static int[] faceYE = {0, 4, 8, 5};
+	private final static int[] faceYC = {0, 4, 5, 1};
+	private final static int[] faceYE = {0, 4, 8, 5};
 	
-	static int[] faceWC = {2, 6, 7, 3};
+	private final static int[] faceWC = {2, 6, 7, 3};
 	static int[] faceWE = {3, 6, 11, 7};
 	
-	static int[] faceRC= {0, 4, 6, 2};
-	static int[] faceRE= {1, 4, 9, 6};
+	private final static int[] faceRC= {0, 4, 6, 2};
+	private final static int[] faceRE= {1, 4, 9, 6};
 	
-	static int[] faceBC ={5, 4, 6, 7};
-	static int[] faceBE ={8, 9, 11, 10};
+	private final static int[] faceBC ={5, 4, 6, 7};
+	private final static int[] faceBE ={8, 9, 11, 10};
 	
-	static int[] faceOC ={1, 5, 7, 3};
-	static int[] faceOE ={2,5, 10, 7};
+	private final static int[] faceOC ={1, 5, 7, 3};
+	private final static int[] faceOE ={2,5, 10, 7};
 	
-	static int[] faceGC={0, 2, 3, 1};
-	static int[] faceGE={0,1, 3, 2};
+	private final static int[] faceGC={0, 2, 3, 1};
+	private final static int[] faceGE={0,1, 3, 2};
 	
 	public String firstState;
 	
@@ -123,7 +123,8 @@ public class Cube {
 		goalEdges=initGoalEdges();
 		makeCube(input);
 		
-		//System.out.println(encodeCorners(cubeCornersMap));
+		System.out.println(firstState);
+		System.out.println(toString());
 		
 	}
 	
@@ -420,9 +421,10 @@ public class Cube {
 					for (int i=0; i<4; i++){
 						currPos =faceYE[i];
 						newPos = (i==3)? faceYE[0] :faceYE[i+1];
+						if(state.containsKey(currPos)){
 						tempCube = state.get(currPos);
 						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						
+						}
 					}
 					break;
 				}
@@ -431,10 +433,10 @@ public class Cube {
 						
 						currPos =faceWE[i];
 						newPos = (i==3)? faceWE[0] :faceWE[i+1];
-					
+						if(state.containsKey(currPos)){
 						tempCube = state.get(currPos);
 						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[0],tempCube[2],tempCube[1]});
-						
+						}
 					}
 					break;
 				}
@@ -444,11 +446,11 @@ public class Cube {
 	
 						currPos =faceRE[i];
 						newPos = (i==3)? faceRE[0] :faceRE[i+1];
-						
+						if(state.containsKey(currPos)){
 							tempCube = state.get(currPos);
 							//cubeEdgesMapCopy.remove(currPos);
 							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
-						
+						}
 					}
 					break;
 				}
@@ -457,10 +459,10 @@ public class Cube {
 		
 						currPos =faceBE[i];
 						newPos = (i==3)? faceBE[0] :faceBE[i+1];
-					
+						if(state.containsKey(currPos)){
 						tempCube = state.get(currPos);
 						cubeEdgesMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
-						
+						}
 					}
 					break;
 				}
@@ -469,11 +471,11 @@ public class Cube {
 												
 						currPos =faceOE[i];
 						newPos = (i==3)? faceOE[0] :faceOE[i+1];
-						
+						if(state.containsKey(currPos)){
 							tempCube = state.get(currPos);
 						//	cubeEdgesMapCopy.remove(currPos);
 							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[1],tempCube[0],tempCube[2]});
-						
+						}
 					}
 					break;
 				}
@@ -482,11 +484,11 @@ public class Cube {
 						
 						currPos =faceGE[i];
 						newPos = (i==3)? faceGE[0] :faceGE[i+1];
-						
+						if(state.containsKey(currPos)){
 							tempCube = state.get(currPos);
 							//cubeEdgesMapCopy.remove(currPos);
 							cubeEdgesMapCopy.put(newPos, new char[] {tempCube[2],tempCube[1],tempCube[0]});
-						
+						}
 					}
 					break;
 				}
@@ -500,14 +502,28 @@ public class Cube {
 	/*
 	 * Converts rotated Cube back to string state
 	 * */
-	public String convertToState(HashMap<Integer, char[]>cubeCornersMap,HashMap<Integer, char[]>cubeEdgesMap){
+	@Override
+	public String toString(){
 		String result ="";
-		/*
-		result+=cubeCornersMap.get(2)[2] + cubeEdgesMap.get(6)[1] + cubeCorners.get(6)[2];//012
-		result+=cubeEdgesMap.get(1)[0] + "R" +  cubeEdgesMap.get(9)[0]; //345
-		result+=cubeCornersMap.get(0)[2]+ cubeEdgesMap.get(4)[1] + cubeCornersMap.get(8)[2]; //678
-		result+=cubeCorners
-		 */
+		result+=""+cubeCornersMap.get(2)[2] + cubeEdgesMap.get(6)[2] + cubeCornersMap.get(6)[2];//012
+		result+=""+cubeEdgesMap.get(1)[2] + "R" +  cubeEdgesMap.get(9)[2]; //345
+		result+=""+cubeCornersMap.get(0)[2]+ cubeEdgesMap.get(4)[2] + cubeCornersMap.get(4)[2]; //678
+		result+=""+cubeCornersMap.get(2)[1] + cubeEdgesMap.get(1)[1] + cubeCornersMap.get(0)[1];//01011
+		result+=""+cubeCornersMap.get(0)[0]+cubeEdgesMap.get(4)[0]+cubeCornersMap.get(4)[0]; //121314
+		result+=""+cubeCornersMap.get(4)[1]+cubeEdgesMap.get(9)[1]+cubeCornersMap.get(6)[1]; //151617
+		result+=""+cubeEdgesMap.get(3)[1]+"G"+cubeEdgesMap.get(0)[1]; //181920
+		result+=""+cubeEdgesMap.get(0)[0]+"Y"+cubeEdgesMap.get(8)[0];//212223
+		result+=""+cubeEdgesMap.get(8)[1]+"B"+cubeEdgesMap.get(11)[1];//242526
+		result+=""+cubeCornersMap.get(3)[1]+cubeEdgesMap.get(2)[1]+cubeCornersMap.get(1)[1];//272829
+		result+=""+cubeCornersMap.get(1)[0]+cubeEdgesMap.get(5)[0]+cubeCornersMap.get(5)[0];//303132
+		result+=""+cubeCornersMap.get(5)[1]+cubeEdgesMap.get(10)[1]+cubeCornersMap.get(7)[1];//333435
+		result+=""+cubeCornersMap.get(1)[2]+cubeEdgesMap.get(5)[2]+cubeCornersMap.get(5)[2];//363738
+		result+=""+cubeEdgesMap.get(2)[2]+"O"+cubeEdgesMap.get(10)[2];//394041
+		result+=""+cubeCornersMap.get(3)[2]+cubeEdgesMap.get(7)[2]+cubeCornersMap.get(7)[2];//424344
+		result+=""+cubeCornersMap.get(3)[0]+cubeEdgesMap.get(7)[0]+cubeCornersMap.get(7)[0];//454647
+		result+=""+cubeEdgesMap.get(3)[0]+"W"+cubeEdgesMap.get(11)[0];//484950
+		result+=""+cubeCornersMap.get(2)[0]+cubeEdgesMap.get(6)[0]+cubeCornersMap.get(6)[0];//515253
+		
 		
 		return result;
 		
@@ -555,15 +571,11 @@ public class Cube {
 		long result =0;
 		initCornerValues();
 		//ArrayList<char[]> cornerValuesCopy = new ArrayList<char[]>(cornerValues);
-		/*
-		for (int i=0; i< state.size(); i++){
+		
+		for (int i=0; i< 12; i++){
 			int ortVal =0; //orientation value
 			char[] cubie = state.get(i);
 			int indexOfCubies = findCubie(cubie, cornerValues);
-			if (indexOfCubies<0){
-				System.out.println(indexOfCubies);
-			}
-			//System.out.println(indexOfCubies);
 			for(int j=0; j<3; j++){
 				//get find the value of the cubie's orientation, by comparing the first char in the orientation
 				if ((cornerValues.get(indexOfCubies+j))[0] == cubie[0]){
@@ -589,17 +601,8 @@ public class Cube {
 		}
 		System.out.println(result);
 		return result;
-		*/
-		if (limit<10000){
-			limit+=1;
-			System.out.println(limit);
-			return limit;
-			
-		}
-		else{
-			System.out.println(limit);
-			return 0;
-		}
+		
+		
 	}
 	
 	public static String encodeEdges(HashMap<Integer, char[]> state){
