@@ -12,5 +12,4 @@ INDEX VERSION 1.126+/home/rebecca/Documents/Github/Rubiks-Cube-Solver/.metadata/
 1513993030.index
 2259717368.index
 3938652823.index
-463046295.index
 3542660237.index
