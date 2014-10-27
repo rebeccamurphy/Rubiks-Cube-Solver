@@ -120,9 +120,12 @@ public class Cube {
 	
 	public Cube(String input){
 		firstState =input;
-		goalEdges=initGoalEdges();
-		makeCube(input);
 		
+		
+		makeCube(input);
+
+		rotate('G');
+		System.out.println("encoded edges" +encodeEdges(0));
 		//System.out.println(firstState);
 		/*
 		rotate('G');
@@ -130,7 +133,7 @@ public class Cube {
 		System.out.println(toString());
 		for(int i=0; i< cubeCornersMap.size();i++)
 			System.out.println(i +" "+ findCubie(cubeCornersMap.get(i), cornersFaces));
-		//encodeCorners(cubeCornersMap);
+		encodeCorners(cubeCornersMap);
 		*/
 	}
 	
@@ -203,7 +206,7 @@ public class Cube {
 		//cornerValues.add(new char[]{'B', 'O', 'W'});//23
 	}
 	
-	public static void initEdgeValues(int whichedge){
+	public static void initEdgeValues(){
 /*
 		//pattern is XYZ
 		if (whichedge==0){
@@ -276,8 +279,6 @@ public class Cube {
 			edgeValues.add(new char[] {'Y', 'O'});//10
 			edgeValues.add(new char[] {'O', 'Y'});//11
 			
-		
-			edgeValues= new ArrayList<char[]>();
 			edgeValues.add(new char[] {'W', 'R'});//0
 			edgeValues.add(new char[] {'R', 'W'});//1
 			
@@ -546,43 +547,8 @@ public class Cube {
 	}
 	
 	/*
-	 * creates a map of where the cubie current is to its goal position
+	 * encodes cube corners to a number
 	 * */
-	private HashMap<Integer, Integer> mappedCorners(){
-		HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
-		for (int i=0; i<8; i++){
-			char[] cubeOutofPos = cubeCornersMap.get(i);
-			Arrays.sort(cubeOutofPos);
-			//System.out.print(new String (cubeOutofPos));
-			for(int j=0; j<8; j++){
-				char[] cubeGoalPos = cornersFaces[j];
-				Arrays.sort(cubeGoalPos);
-				//System.out.print(new String(cubeGoalPos));
-				if (Arrays.equals(cubeOutofPos, cubeGoalPos)){
-					result.put(i, j);
-					//System.out.println(i+ " " + j);
-					break;
-				}
-			}
-		}
-		return result;
-	}
-	
-	private static int encode (HashMap<Integer, Integer> mappedSides, int encodedLength){
-		//need to fix, minus i?
-		int result =0;
-		for (int i =0; i<encodedLength; i++){
-			int diff =0;
-			int currPos=i;
-			int goalPos =mappedSides.get(currPos);
-			// Find the shift amount for this current position
-			
-			//result += (diff) * factorial(encodedLength-i);
-		}
-	
-		return result;
-	}
-	
 	public int encodeCorners (){
 		int result =0;
 		initCornerValues();
@@ -590,7 +556,6 @@ public class Cube {
 		int simpleState=0;
 		for (int i=0; i< 8; i++){
 			int ortVal =0; //orientation value
-			int val=0;
 			char[] cubie = cubeCornersMap.get(i);
 			//System.out.println(new String(cubie));
 			int indexOfCubies = findCubie(cubie, cornerValues);
@@ -620,79 +585,102 @@ public class Cube {
 		//System.out.println(result);
 		return result;
 		
-		
 	}
 	
-	public static String encodeEdges(HashMap<Integer, char[]> state){
-		/*HashMap<Integer, Integer> mappedEdges = mapEdges(state);
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < mappedEdges.size(); i++) {
+	/*
+	 * Encodes cube edges to a number
+	 */
+	public int encodeEdges(int base){
+		int result =0;
+		initEdgeValues();
+		
+		for (int i=0; i< 6; i++){
+			System.out.println(i);
+			char[] cubie = cubeEdgesMap.get(i);
+			int indexOfCubies = findEdgeCubie(cubie, edgeValues);
+			int ortVal =0;
+			char[] temp = new char[2];
+			int k=0;
+			for (int j=0; j<3; j++){
+				if (cubie[j] !='0'){
+					temp[k]=cubie[j];
+					k++;
+				}
+			}
+			if (Arrays.equals(edgeValues.get(indexOfCubies), temp))
+				ortVal = indexOfCubies;
+			else
+				ortVal = indexOfCubies+1;
 			
-			builder.append(mappedEdges.get(i));
-		}
-		return builder.toString();
-		*/
-		if (limit<10000){
-			limit+=1;
-			System.out.println(limit);
-			return ""+limit;
+			int rem= edgeValues.size();
+			
+			System.out.println("indexOfCubies " +indexOfCubies);
+			//System.out.println(ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10));
+			
+			result+= ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10);
+
+			edgeValues.remove(indexOfCubies+1);
+			edgeValues.remove(indexOfCubies);
 			
 		}
-		else{
-			System.out.println(limit);
-			return "0";
-		}
-	}
-	private static HashMap<Integer, Integer> mapEdges(HashMap<Integer, char[]> state) {
-		for (int i=0; i<12; i++)
-			if (state.containsKey(i))
-		    System.out.println(new String (state.get(i)));
-		HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
-			for (int i = 0; i <12; i++) {
-				if (state.containsKey(i)){
-					char[] temp = new char[3];
-					temp = state.get(i);
-					System.out.println("temp " + new String(temp));
-					String tempStr ="";
-					for (int j=0; j< temp.length;j++){
-						//remove 0s from string
-						if (temp[j] != '0')
-							tempStr+=temp[j];
-					}
-					if (tempStr.charAt(0)>tempStr.charAt(1))
-						tempStr="" +tempStr.charAt(1) +tempStr.charAt(0);
-					result.put(Cube.goalEdges.get(tempStr), i);
-					System.out.println(Cube.goalEdges.get(tempStr) +" " +i +" tempstr "+tempStr );
-			}	
-		}
-			
+		
 		return result;
 	}
 	
-	public static int findCubie(char[] cubie,List<char[]> cornerValuesCopy ){
-
-
-		char[] tempCubie = new char[8];
-		tempCubie =cubie.clone();
+	public static int findEdgeCubie(char[] cubie, List<char[]> cornerValuesCopy){
+		char[] tempCubie = new char[2];
+		int k=0;
+		for (int j=0; j<3; j++){
+			//strip 0's
+			if (cubie[j] !='0'){
+				tempCubie[k]=cubie[j];
+				k++;
+			}
+		}
 		Arrays.sort(tempCubie);
-		//System.out.println(new String (cubie));
 		char[] temp1 = new char[3];
+		System.out.println(new String(tempCubie));
 		for (int i=0; i<cornerValuesCopy.size(); i++){
 			temp1 =cornerValuesCopy.get(i).clone();
 			Arrays.sort(temp1);
-			//System.out.println(new String (temp1));
+			System.out.println(temp1);
 			if (Arrays.equals(temp1, tempCubie)){
 				return i;
 			}
 			
 		}
-		System.exit(0);
+		return -1;
+	}
+	
+	public static int findCubie(char[] cubie,List<char[]> cornerValuesCopy ){
+		char[] tempCubie = new char[3];
+		int k=0;
+		for (int j=0; j<3; j++){
+			//strip 0's
+			if (cubie[j] !='0'){
+				tempCubie[k]=cubie[j];
+				k++;
+			}
+		}
+		
+		Arrays.sort(tempCubie);
+		
+		char[] temp1 = new char[3];
+		for (int i=0; i<cornerValuesCopy.size(); i++){
+			temp1 =cornerValuesCopy.get(i).clone();
+			Arrays.sort(temp1);
+			System.out.println(Arrays.equals(temp1, tempCubie));
+			if (Arrays.equals(temp1, tempCubie)){
+				return i;
+			}
+			
+		}
 		return -1;
 	}
 
 	public static int findCubie(char[] cubie, char[][] cornerValuesCopy ){
 
-		char[] tempCubie = new char[8];
+		char[] tempCubie = new char[3];
 		tempCubie =cubie.clone();
 		Arrays.sort(tempCubie);
 		char[] temp1 = new char[3];

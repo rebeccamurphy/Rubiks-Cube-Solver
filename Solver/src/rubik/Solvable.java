@@ -16,7 +16,7 @@ public class Solvable {
 	        else{
 	        	Cube cube = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBGGGYYYBBBOOOOOOOOOWWWWWWWWW");
 	        	//cube.encodeCorners(cube.cubeCornersMap);
-	        	CornerHeuristics.generateCornerHeuristicsBreathFirst();
+	        	//CornerHeuristics.generateCornerHeuristicsBreathFirst();
 	        	//EdgeHeuristics.generateEdgeHeuristics(1);
 	        }
 	        	
