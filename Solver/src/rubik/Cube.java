@@ -123,15 +123,15 @@ public class Cube {
 		goalEdges=initGoalEdges();
 		makeCube(input);
 		
-		System.out.println(firstState);
-		
+		//System.out.println(firstState);
+		/*
 		rotate('G');
-		encodeCorners(cubeCornersMap);
+		encodeCorners();
 		System.out.println(toString());
 		for(int i=0; i< cubeCornersMap.size();i++)
 			System.out.println(i +" "+ findCubie(cubeCornersMap.get(i), cornersFaces));
 		//encodeCorners(cubeCornersMap);
-		
+		*/
 	}
 	
 	
@@ -324,9 +324,15 @@ public class Cube {
 		}
 		return true;
 	}
+	
 	public void rotate(char face){
 		cubeCornersMap =rotate(face,cubeCornersMap, 'C');
 		cubeEdgesMap=rotate(face,cubeEdgesMap, 'E');
+		
+	}
+	public void rotate(char face, char cubieType){
+		cubeCornersMap =rotate(face,cubeCornersMap, cubieType);
+		
 	}
 	public static void rotate(char face,HashMap<Integer,char[]> state, int turns, char CorE){
 		//turns shouldnt be greater than 3
@@ -577,7 +583,7 @@ public class Cube {
 		return result;
 	}
 	
-	public static int encodeCorners (HashMap<Integer, char[]> state){
+	public int encodeCorners (){
 		int result =0;
 		initCornerValues();
 		int orientation=0;
@@ -585,10 +591,10 @@ public class Cube {
 		for (int i=0; i< 8; i++){
 			int ortVal =0; //orientation value
 			int val=0;
-			char[] cubie = state.get(i);
+			char[] cubie = cubeCornersMap.get(i);
 			//System.out.println(new String(cubie));
 			int indexOfCubies = findCubie(cubie, cornerValues);
-			System.out.println(new String(cornerValues.get(indexOfCubies))+" " +new String (cubie));
+			//System.out.println(new String(cornerValues.get(indexOfCubies))+" " +new String (cubie));
 			if (cornerValues.get(indexOfCubies)[0] == cubie[0])
 				ortVal=0;
 			else if(cornerValues.get(indexOfCubies)[0]==cubie[1])
@@ -605,18 +611,13 @@ public class Cube {
 			//System.out.println(findCubie(cubie, cornersFaces));
 			
 			orientation+= ortVal* Math.pow(3, findCubie(cubie, cornersFaces));
-			System.out.println(ortVal +" "+orientation);
+			//System.out.println(ortVal +" "+orientation);
 		}
 		//System.out.println(orientation);
-		System.out.println(""+simpleState);
+		//System.out.println(""+simpleState);
 		result = simpleState + factorial(8) *orientation;
 		
-		if (result<0){
-			for (int i=0; i<state.size(); i++)
-				System.out.println(result +" "+ new String (state.get(i)));
-			System.exit(0);
-		}
-		System.out.println(result);
+		//System.out.println(result);
 		return result;
 		
 		
@@ -645,7 +646,7 @@ public class Cube {
 	private static HashMap<Integer, Integer> mapEdges(HashMap<Integer, char[]> state) {
 		for (int i=0; i<12; i++)
 			if (state.containsKey(i))
-			System.out.println(new String (state.get(i)));
+		    System.out.println(new String (state.get(i)));
 		HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
 			for (int i = 0; i <12; i++) {
 				if (state.containsKey(i)){

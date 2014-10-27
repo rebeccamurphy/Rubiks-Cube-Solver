@@ -7,7 +7,7 @@ public class CubeNode {
 	/**
 	 * The state of the cube
 	 */
-	public  HashMap<Integer,char[]>  state;
+	public  String state;
 
 	/**
 	 * The heuristic value
@@ -20,11 +20,12 @@ public class CubeNode {
 	 * @param heuristic the heuristic value
 	 */
 	public long encodedState;
-	public CubeNode( HashMap<Integer,char[]>  state, int heuristic) {
+	
+	public CubeNode( String state, int heuristic) {
 		this.state = state;
 		this.heuristic = heuristic;
 	}
-	public CubeNode( HashMap<Integer,char[]>  state, int heuristic, long encodedState) {
+	public CubeNode( String  state, int heuristic, long encodedState) {
 		this.encodedState = encodedState;
 		this.state = state;
 		this.heuristic = heuristic;
