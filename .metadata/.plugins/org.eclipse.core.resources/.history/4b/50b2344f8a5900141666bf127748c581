@@ -1,0 +1,85 @@
+package rubik;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class EdgeHeuristics {
+
+	public static void generateEdgeHeuristics(int set) throws IOException {
+		// Make a cube and initialize it with a solved cube state
+		Cube cube = new Cube(Cube.GOAL_STRING);
+
+		// Make a new Queue to perform BFS
+		Queue<CubeNode> q = new LinkedList<CubeNode>();
+
+		
+		//q.add(new CubeNode(cube.cubeEdgesMap, 0));
+		byte[] edgeHeuristics = new byte[42577920];
+		//int[] edgeHeuristics = new int[101];
+		
+		HashMap<Integer,char[]> edges = new HashMap<Integer,char[]> ();
+		
+		int base = 6 * set;
+		int limit = 6 + base;
+
+		// Select the proper set of edges to work with
+		if (set == 0 || set == 1) {
+			for (int i = base; i < limit; i++) {
+				edges.put(i, cube.cubeEdgesMap.get(i));
+			}
+		} else {
+			System.err.println("put in 0 or 1");
+		}
+		// Put the solved/initial state of the cube on the queue
+		q.add(new CubeNode(edges, 0));
+		// Iterate till the cows come home
+		while (!q.isEmpty()) {
+			CubeNode current = q.poll();
+			// Turning for each possible node
+			for (int i=0; i<Cube.FACES.length; i++){
+				//Do a clockwise turn
+				 HashMap<Integer,char[]> newState = Cube.rotate(Cube.FACES[i], current.state, 'E');
+				 String encodedEdge = Cube.encodeEdges(newState);
+				 int encodedEdgeNum = Integer.parseInt(encodedEdge);
+				 if (edgeHeuristics[encodedEdgeNum]==0){
+					 //new combo, so we can add it to the queue
+					 q.add(new CubeNode(newState, current.heuristic+1));
+				 }
+			}
+
+			// Handle the current node. We'll encode the edgeHeuristics, and check to
+			// see if the state has already been stored
+			String encodedEdge = Cube.encodeEdges(current.state);
+			int encodedEdgeNum = Integer.parseInt(encodedEdge);
+			if (edgeHeuristics[encodedEdgeNum] == 0) {
+				edgeHeuristics[encodedEdgeNum] = (byte) current.heuristic;
+				// Print this out
+				System.out.println(encodedEdge + "," + current.heuristic);
+			}
+		}
+		FileOutputStream fos = new FileOutputStream("edge0.bat");
+		  
+
+		  /*
+		   * To write byte array to a file, use
+		   * void write(byte[] bArray) method of Java FileOutputStream class.
+		   *
+		   * This method writes given byte array to a file.
+		   */
+
+		   fos.write(edgeHeuristics);
+
+		  /*
+		   * Close FileOutputStream using,
+		   * void close() method of Java FileOutputStream class.
+		   *
+		   */
+
+		   fos.close();
+	}
+
+}

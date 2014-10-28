@@ -1,0 +1,63 @@
+package rubik;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class EdgeHeuristics {
+
+	public static void generateEdgeHeuristics(int set) {
+		// Make a cube and initialize it with a solved cube state
+		Cube cube = new Cube(Cube.GOAL_STRING);
+
+		// Make a new Queue to perform BFS
+		Queue<CubeNode> q = new LinkedList<CubeNode>();
+
+		// Put the solved/initial state of the cube on the queue
+		q.add(new CubeNode(cube.cubeEdgesMap, 0));
+		int[] edgeHeuristics = new int[42577920];
+		HashMap<Integer,char[]> edges = new HashMap<Integer,char[]> ();
+		
+		int base = 6 * set;
+		int limit = 6 + base;
+
+		// Select the proper set of edges to work with
+		if (set == 0 || set == 1) {
+			for (int i = base; i < limit; i++) {
+				edges.put(i, cube.cubeEdgesMap.get(i));
+			}
+		} else {
+			System.err.println("put in 0 or 1");
+		}
+
+
+		// Iterate until we can't anymore
+		while (!q.isEmpty()) {
+			CubeNode current = q.poll();
+			// For each cube state we're given, we need to try all of
+			// possible turns of each other other faces
+			
+			for (int i=0; i<Cube.FACES.length; i++){
+				//Do a clockwise turn
+				 HashMap<Integer,char[]> newState = Cube.rotate(Cube.FACES[i], current.state, 'E');
+				 String encodedEdge = Cube.encodeEdges(newState);
+				 int encodedEdgeNum = Integer.parseInt(encodedEdge);
+				 if (edgeHeuristics[encodedEdgeNum]==0){
+					 //new combo, so we can add it to the queue
+					 q.add(new CubeNode(newState, current.heuristic+1));
+				 }
+			}
+
+			// Handle the current node. We'll encode the edgeHeuristics, and check to
+			// see if we've seen this permutation before.
+			String encodedEdge = Cube.encodeEdges(current.state);
+			int encodedEdgeNum = Integer.parseInt(encodedEdge);
+			if (edgeHeuristics[encodedEdgeNum] == 0) {
+				edgeHeuristics[encodedEdgeNum] = current.heuristic;
+				// Print this out
+				System.out.println(encodedEdge + "," + current.heuristic);
+			}
+		}
+	}
+
+}
