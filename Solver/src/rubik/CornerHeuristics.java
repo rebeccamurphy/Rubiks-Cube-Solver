@@ -82,7 +82,7 @@ public class CornerHeuristics {
 				 cube.rotate(Cube.FACES[i], 'C');
 				 String newState = cube.toString();
 				 int encodedCorner = cube.encodeCorners();
-				 System.out.println(Cube.FACES[i]);
+				 //System.out.println(Cube.FACES[i]);
 				 if (!checkInFile(encodedCorner)){
 					 //new combo, so we can add it to the queue
 					 //System.out.println(encodedCorner+" " +newState);
