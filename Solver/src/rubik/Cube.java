@@ -124,8 +124,8 @@ public class Cube {
 		
 		makeCube(input);
 
-		rotate('G');
-		System.out.println("encoded edges" +encodeEdges(0));
+		//rotate('G');
+		//System.out.println("encoded edges" +encodeEdges(0));
 		//System.out.println(firstState);
 		/*
 		rotate('G');
@@ -595,7 +595,7 @@ public class Cube {
 		initEdgeValues();
 		
 		for (int i=0; i< 6; i++){
-			System.out.println(i);
+			//System.out.println(i);
 			char[] cubie = cubeEdgesMap.get(i);
 			int indexOfCubies = findEdgeCubie(cubie, edgeValues);
 			int ortVal =0;
@@ -614,7 +614,7 @@ public class Cube {
 			
 			int rem= edgeValues.size();
 			
-			System.out.println("indexOfCubies " +indexOfCubies);
+			//System.out.println("indexOfCubies " +indexOfCubies);
 			//System.out.println(ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10));
 			
 			result+= ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10);
@@ -639,11 +639,11 @@ public class Cube {
 		}
 		Arrays.sort(tempCubie);
 		char[] temp1 = new char[3];
-		System.out.println(new String(tempCubie));
+		//System.out.println(new String(tempCubie));
 		for (int i=0; i<cornerValuesCopy.size(); i++){
 			temp1 =cornerValuesCopy.get(i).clone();
 			Arrays.sort(temp1);
-			System.out.println(temp1);
+			//System.out.println(temp1);
 			if (Arrays.equals(temp1, tempCubie)){
 				return i;
 			}
@@ -669,7 +669,7 @@ public class Cube {
 		for (int i=0; i<cornerValuesCopy.size(); i++){
 			temp1 =cornerValuesCopy.get(i).clone();
 			Arrays.sort(temp1);
-			System.out.println(Arrays.equals(temp1, tempCubie));
+			//System.out.println(Arrays.equals(temp1, tempCubie));
 			if (Arrays.equals(temp1, tempCubie)){
 				return i;
 			}

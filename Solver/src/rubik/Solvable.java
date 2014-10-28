@@ -14,10 +14,10 @@ public class Solvable {
 	            
 	        }
 	        else{
-	        	Cube cube = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBGGGYYYBBBOOOOOOOOOWWWWWWWWW");
+	        	//Cube cube = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBGGGYYYBBBOOOOOOOOOWWWWWWWWW");
 	        	//cube.encodeCorners(cube.cubeCornersMap);
 	        	//CornerHeuristics.generateCornerHeuristicsBreathFirst();
-	        	//EdgeHeuristics.generateEdgeHeuristics(1);
+	        	EdgeHeuristics.generateEdgeHeuristics(0);
 	        }
 	        	
 	        
