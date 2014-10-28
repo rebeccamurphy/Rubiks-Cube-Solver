@@ -16,16 +16,13 @@ public class EdgeHeuristics {
 		// Make a cube and initialize it with a solved cube state
 		Cube cube = new Cube(Cube.GOAL_STRING);
 		String fileNum;
-		if (set==1)
+		if (set==0)
 			fileNum ="One";
 		else 
 			fileNum="Two";
 		// Make a new Queue to perform BFS
 		Queue<CubeNode> q = new LinkedList<CubeNode>();
 
-		
-		//q.add(new CubeNode(cube.cubeEdgesMap, 0));
-		//int[] edgeHeuristics = new int[101];
 		
 		HashMap<Integer,char[]> edges = new HashMap<Integer,char[]> ();
 		
@@ -40,6 +37,7 @@ public class EdgeHeuristics {
 		} else {
 			System.err.println("put in 0 or 1");
 		}
+		
 		// Put the solved/initial state of the cube on the queue
 		q.add(new CubeNode(Cube.GOAL_STRING, 0));
 		// Iterate till the cows come home
@@ -54,7 +52,7 @@ public class EdgeHeuristics {
 				 String newState = cube.toString();
 				 int encodedEdge = cube.encodeEdges(set);
 				 //System.out.println(Cube.FACES[i]);
-				 if (!checkInFile(encodedEdge)){
+				 if (!checkInFile(encodedEdge, fileNum)){
 					 //new combo, so we can add it to the queue
 					 //System.out.println(encodedCorner+" " +newState);
 					 q.add(new CubeNode(newState, current.heuristic+1));
@@ -64,8 +62,8 @@ public class EdgeHeuristics {
 			// Handle the current node. We'll encode the corners, and check to
 			// see if we've seen this permutation before.
 			int encodedEdge = cube.encodeEdges(set);
-			if (!checkInFile(encodedEdge)) {
-				FileWriter pw = new FileWriter("edges"+fileNum+".csv",true);
+			if (!checkInFile(encodedEdge, fileNum)) {
+				FileWriter pw = new FileWriter("edges"+fileNum+"Duplicate.csv",true);
 				pw.append(encodedEdge + "," + current.heuristic);
 				pw.append("\n");
 				pw.flush();
@@ -75,8 +73,8 @@ public class EdgeHeuristics {
 		}
 		}
 		
-public static boolean checkInFile(int encoded){
-	String csvFile = "corner.csv";
+public static boolean checkInFile(int encoded, String fileNum){
+	String csvFile = "edges"+fileNum+"Duplicate.csv";
 	BufferedReader br = null;
 	String line = "";
 	
@@ -84,9 +82,8 @@ public static boolean checkInFile(int encoded){
 	try {
 		br = new BufferedReader(new FileReader(csvFile));
 		while ((line = br.readLine()) != null) {
- 
-		        // use comma as separator
-			
+
+		        // use comma as separator	
 			String encodedCube = line.split(",")[0];
 			if (encodedCube.isEmpty())
 				return false;

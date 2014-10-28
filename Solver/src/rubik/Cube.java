@@ -125,7 +125,7 @@ public class Cube {
 		makeCube(input);
 
 		//rotate('G');
-		//System.out.println("encoded edges" +encodeEdges(0));
+		//System.out.println("encoded edges " +encodeEdges(0));
 		//System.out.println(firstState);
 		/*
 		rotate('G');
