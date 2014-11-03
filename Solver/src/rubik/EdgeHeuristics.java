@@ -55,7 +55,7 @@ public class EdgeHeuristics {
 				 if (!checkInFile(encodedEdge, fileNum)){
 					 //new combo, so we can add it to the queue
 					 //System.out.println(encodedCorner+" " +newState);
-					 q.add(new CubeNode(newState, current.heuristic+1));
+					 q.add(new CubeNode(newState, current.hval+1));
 				 }
 			}
 
@@ -65,11 +65,11 @@ public class EdgeHeuristics {
 			if (!checkInFile(encodedEdge, fileNum)) {
 				
 				FileWriter pw = new FileWriter("edges"+fileNum+"Duplicate.csv",true);
-				pw.append(encodedEdge + "," + current.heuristic);
+				pw.append(encodedEdge + "," + current.hval);
 				pw.append("\n");
 				pw.flush();
 		        pw.close();
-				System.out.println(encodedEdge + "," + current.heuristic);
+				System.out.println(encodedEdge + "," + current.hval);
 			}
 		}
 		}

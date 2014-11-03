@@ -15,23 +15,65 @@ public class IDAStar {
 	public static boolean details;
 	public static PriorityQueue<CubeNode> frontier = new PriorityQueue<CubeNode>();
 	public static HashSet<CubeNode> explored = new HashSet<CubeNode>();
-	
-	//public static final int[] corners = readHeuristicFile(951331, "corners.csv");
-	//public static final int[] edgesSetOne = readHeuristicFile(2858, "edgesSetOne.csv");
-	//public static final int[] edgesSetTwo = readHeuristicFile(1428, "edgesSetTwo.csv");
 	public static int[] corners;
 	public static int[] edgesSetOne;
 	public static int[] edgesSetTwo;
 	
+	/***
+	 * Sudo Code for IDA*
+	 	 node              current node
+		 g                 the cost to reach current node
+		 f                 estimated cost of the cheapest path (root..node..goal)
+		 h(node)           estimated cost of the cheapest path (node..goal)
+		 cost(node, succ)  path cost function
+		 is_goal(node)     goal test
+		 successors(node)  node expanding function
+		 
+		 procedure ida_star(root, cost(), is_goal(), h())
+		   bound := h(root)
+		   loop
+		     t := search(root, 0, bound)
+		     if t = FOUND then return FOUND
+		     if t = ∞ then return NOT_FOUND
+		     bound := t
+		   end loop
+		 end procedure
+		 
+		 function search(node, g, bound)
+		   f := g + h(node)
+		   if f > bound then return f
+		   if is_goal(node) then return FOUND
+		   min := ∞
+		   for succ in successors(node) do
+		     t := search(succ, g + cost(node, succ), bound)
+		     if t = FOUND then return FOUND
+		     if t < min then min := t
+		   end for
+		   return min
+		 end function
+	 */
+	
+	
 	public static String doIDAStar(String state, boolean moreInfo){
+		 
+		
+		//extra variable for debugging purposes
 		details = moreInfo;
 		if (state.equals(Cube.GOAL_STRING)){
 			return "The cube is already solved";
 		}
-		corners = readHeuristicFile(88179840, "corners.csv");
-		edgesSetOne = readHeuristicFile(42577920, "edgeSetOne.csv");
-		edgesSetTwo = readHeuristicFile(42577920, "edgeSetTwo.csv");
-
+		try {
+			corners = readHeuristicFile(88179840, "corners.csv");
+			edgesSetOne = readHeuristicFile(42577920, "edgeSetOne.csv");
+			edgesSetTwo = readHeuristicFile(42577920, "edgeSetTwo.csv");
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Cube cubeStart = new Cube(state);
 		int encodedCorner = cubeStart.encodeCorners();
 		int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
@@ -40,34 +82,43 @@ public class IDAStar {
 		//make the first cube node	
 		
 		//set the nextbound to the original value
+		//bound := h(root) 
 		nextBound = startState.hval; 
 		
 		//set nodes visited
 		nodesVisited =0;
 		
-		//init end
+		//initilize end as null
 		
 		CubeNode end = null;
 		
-		//Loop until the solution is found
+		//keep going until the solution is found
+		//loop
 		while (end == null) {
 			if (details) {
 				System.out.println("Current bound is: " + nextBound);
 				System.out.println("Number of Nodes visited: " + nodesVisited);
 			}
+			
 			frontier.add(startState);
+			//t:= search(root, 0, bound);
 			end = search(nextBound);
+			
 			// The iterative-deepening portion of IDA*
-			// Increment the bound if we haven't found a solution
+			// Increment the bound if a solution isn't found
+			
+			//bound:=t
 			nextBound++;
-			// Reset the frontier and exploredSet
+			
+			// Clear the frontier and explored
 			frontier.clear();
 			explored.clear();
 		}
 		if (details) {
-			System.out.println("Solved!");
+			System.out.println("Solved Yay");
 			System.out.println("Total # of nodes visited: " + nodesVisited);
 		}
+		
 		return end.path;
 		
 		
@@ -75,23 +126,27 @@ public class IDAStar {
 	/**
 	 * The recursive function for IDA*
 	 * @param bound the current bound - used to tell if nodes need to be expanded
-	 * @return the node version of the goal state (eventually)
+	 * @return the node version of the goal state (eventually) (hopefully)
 	 */
 	private static CubeNode search(int bound) {
 		nodesVisited++;
 
 		while (!frontier.isEmpty()) {
 			nodesVisited++;
+			//current node is node at the top of the frontier
 			CubeNode current = frontier.poll();
-			//If the goal has been reached, return the goal node
+			
 			if (details){
-				System.out.println("Current State: " + current.state);
+				//System.out.println("Current State: " + current.state);
 			}
+
+			//If the goal has been reached, return the goal node
+			//RETURN FOUND
 			if (current.state.equals(Cube.GOAL_STRING)) {
 				return current;
 			}
 			
-			// Add this current node to our explored set
+			// mark current node as explored
 			explored.add(current);
 			
 			// Get all of the possible successors from the current cube node
@@ -99,11 +154,16 @@ public class IDAStar {
 			
 			// Go through each successor
 			for (int i =0; i<successors.size(); i++) {
+				//f := g + h(node)
 				int f = current.g + successors.get(i).hval;
+				//this extra check is because my heuristic tables are incomplete
+				if (successors.get(i).state.equals(Cube.GOAL_STRING))
+					return successors.get(i);
 				successors.get(i).g = current.g + 1;
 				if (f <= bound && !explored.contains(successors.get(i))) {
 					// Add it to our frontier
 					frontier.add(successors.get(i));
+					
 				}
 			}
 		}
@@ -112,37 +172,25 @@ public class IDAStar {
 	}
 	
 	
-	private static int[] readHeuristicFile (int fileLength, String fileName) {
+	private static int[] readHeuristicFile (int fileLength, String fileName) throws NumberFormatException, IOException {
 		int[] heuristics = new int[fileLength];
 		FileReader file = null;
-		String line;
+		String line; 
 		try {
 			file = new FileReader(fileName);
 			BufferedReader reader = new BufferedReader(file);
 			while ((line = reader.readLine()) != null) {
 				// For each line, split by the comma
-				String[] lineData = line.split(",");
-				// lineData[0] will be the encoded corner value
-				// lineData[1] will be the calculated heuristic
-				if (!(lineData[0].equals("") || lineData[1].equals(""))) 
-				{	if (Integer.parseInt(lineData[0]) <fileLength)
-						heuristics[Integer.parseInt(lineData[0])] = Integer.parseInt(lineData[1]);
+				String[] lineState = line.split(",");
+				//As in the function to generate the heuristics, [0] is the encoded state,[1] is the hval
+				if (!(lineState[0].equals("") || lineState[1].equals(""))) 
+				{	if (Integer.parseInt(lineState[0]) <fileLength)
+						heuristics[Integer.parseInt(lineState[0])] = Integer.parseInt(lineState[1]);
 				}
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("File not found");
-		} catch (IOException e) {
-			throw new RuntimeException("IO error occurred");
-		} finally {
-			if (file != null) {
-				try {
-					file.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 
 		return heuristics;

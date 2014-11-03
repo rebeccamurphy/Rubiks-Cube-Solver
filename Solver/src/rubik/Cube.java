@@ -1,6 +1,5 @@
 package rubik;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -124,9 +123,9 @@ public class Cube {
 		
 		makeCube(input);
 
-		//rotate('G');
+		//System.out.println(rotateStr('O'));
 		//System.out.println("encoded edges " +encodeEdges(0));
-		//System.out.println(firstState);
+		
 		/*
 		rotate('G');
 		encodeCorners();
@@ -655,7 +654,7 @@ public class Cube {
 			edgeValues.remove(indexOfCubies);
 			
 		}
-		System.out.println(result);
+		//System.out.println(result);
 		return result;
 		}
 		else {

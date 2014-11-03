@@ -10,15 +10,18 @@ public class Solvable {
 	        	String file = args[0];
 	            String strFile = readFile(file);
 	            strFile = strFile.replaceAll("\\s+","");
-	            System.out.println(Cubies.checkValid(strFile));
+	        	//System.out.println(IDAStar.doIDAStar("RRRRRRRRRGGGYYYBBBGGGYYYBBBYYYBBBWWWOOOOOOOOOGGGWWWWWW",true));
+
+	        	//System.out.println("RRRRRRRRRGGGYYYBBBGGGYYYBBBYYYBBBWWWOOOOOOOOOGGGWWWWWW");
 	            
 	        }
 	        else{
-	        	//Cube cube = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBGGGYYYBBBOOOOOOOOOWWWWWWWWW");
+	        	//Cube cube = new Cube("RRRRRRRRRGGGYYYBBBGGGYYYBBBYYYBBBWWWOOOOOOOOOGGGWWWWWW");
+	        	//System.out.println(Cube.GOAL_STRING);
 	        	//cube.encodeCorners(cube.cubeCornersMap);
 	        	//CornerHeuristics.generateCornerHeuristicsBreathFirst();
-	        	EdgeHeuristics.generateEdgeHeuristics(0);
-	        	//System.out.println(IDAStar.doIDAStar("GGWRRGRRGOWWGGOYYROGOYYYRBRYYYRBGRWWBOYBOBBOBOGOWWBWWB",true));
+	        	//EdgeHeuristics.generateEdgeHeuristics(0);
+	        	System.out.println(IDAStar.doIDAStar("GGGRRRRRRRBBWWWGGOGGOYYYRBBGGOYYYRBBBBBOOOOOOWWWWWWYYY",true));
 	        }
 	        	
 	        

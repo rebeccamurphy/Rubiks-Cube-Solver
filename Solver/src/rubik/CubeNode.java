@@ -16,7 +16,7 @@ public class CubeNode implements Comparable<CubeNode>{
 	public int hval;
 
 	/**
-	 * The g value
+	 * g                 the cost to reach current node
 	 */
 	public int g;
 
@@ -29,7 +29,6 @@ public class CubeNode implements Comparable<CubeNode>{
 	 * @param state the state of the cube
 	 * @param heuristic the heuristic value
 	 */
-	public long encodedState;
 	
 	public CubeNode( String state, int heuristic) {
 		this.state = state;
@@ -41,7 +40,7 @@ public class CubeNode implements Comparable<CubeNode>{
 		this.state = state;
 		this.hval= heuristic;
 		this.g =0;
-		this.path="";
+		this.path=path;
 	}
 	public CubeNode( String state, int heuristic, int g, String path) {
 		this.state = state;
@@ -49,11 +48,7 @@ public class CubeNode implements Comparable<CubeNode>{
 		this.g =g;
 		this.path=path;
 	}
-	public CubeNode( String  state, int heuristic, long encodedState) {
-		this.encodedState = encodedState;
-		this.state = state;
-		this.hval= heuristic;
-	}
+	
 
 	/**
 	 * Make all successors of the given node.
@@ -65,15 +60,20 @@ public class CubeNode implements Comparable<CubeNode>{
 		ArrayList<CubeNode> successors = new ArrayList<CubeNode>();
 		for (int i=0; i<Cube.FACES.length; i++) {
 			
-			//Make a new Cube of the node 
 			Cube current = new Cube(node.state);
+			//Make a new Cube of the node 
 			
 			// First make a Make a clockwise turn
 			current.rotate(Cube.FACES[i]);
 			
 			//Covert the successor to a string
 			String newState = current.toString();
-			
+			/*if (Cube.FACES[i] =='O'){
+				System.out.println(newState);
+				System.out.println(Cube.GOAL_STRING);
+				System.out.println(newState.equals(Cube.GOAL_STRING));
+				
+			}*/
 			//Encode the corners of the successor 
 			int encodedCorner = current.encodeCorners();
 			

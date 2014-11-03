@@ -86,7 +86,7 @@ public class CornerHeuristics {
 				 if (!checkInFile(encodedCorner)){
 					 //new combo, so we can add it to the queue
 					 //System.out.println(encodedCorner+" " +newState);
-					 q.add(new CubeNode(newState, current.heuristic+1));
+					 q.add(new CubeNode(newState, current.hval+1));
 				 }
 			}
 
@@ -95,11 +95,11 @@ public class CornerHeuristics {
 			int encodedCorner = cube.encodeCorners();
 			if (!checkInFile(encodedCorner)) {
 				FileWriter pw = new FileWriter("cornerDup.csv",true);
-				pw.append(encodedCorner + "," + current.heuristic);
+				pw.append(encodedCorner + "," + current.hval);
 				pw.append("\n");
 				pw.flush();
 		        pw.close();
-				System.out.println(encodedCorner + "," + current.heuristic);
+				System.out.println(encodedCorner + "," + current.hval);
 			}
 		}
 	}
@@ -113,9 +113,7 @@ public class CornerHeuristics {
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((line = br.readLine()) != null) {
-	 
 			        // use comma as separator
-				
 				String encodedCube = line.split(",")[0];
 				if (encodedCube.isEmpty())
 					return false;
