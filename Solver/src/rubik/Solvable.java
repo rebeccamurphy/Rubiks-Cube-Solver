@@ -18,6 +18,7 @@ public class Solvable {
 	        	//cube.encodeCorners(cube.cubeCornersMap);
 	        	//CornerHeuristics.generateCornerHeuristicsBreathFirst();
 	        	EdgeHeuristics.generateEdgeHeuristics(0);
+	        	//System.out.println(IDAStar.doIDAStar("GGWRRGRRGOWWGGOYYROGOYYYRBRYYYRBGRWWBOYBOBBOBOGOWWBWWB",true));
 	        }
 	        	
 	        

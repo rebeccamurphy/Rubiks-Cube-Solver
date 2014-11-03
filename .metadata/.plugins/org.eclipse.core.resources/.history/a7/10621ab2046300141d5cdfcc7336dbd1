@@ -1,0 +1,114 @@
+package rubik;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class CubeNode implements Comparable<CubeNode>{
+
+	/**
+	 * The state of the cube
+	 */
+	public  String state;
+
+	/**
+	 * The heuristic value
+	 */
+	public int heuristic;
+
+	/**
+	 * The g value
+	 */
+	public int g;
+
+	/**
+	 * The path from the goal state to this node
+	 */
+	public String path;
+	/**
+	 *
+	 * @param state the state of the cube
+	 * @param heuristic the heuristic value
+	 */
+	public long encodedState;
+	
+	public CubeNode( String state, int heuristic) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =0;
+		this.path="";
+	}
+	public CubeNode( String state, int heuristic, String path) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =0;
+		this.path="";
+	}
+	public CubeNode( String state, int heuristic, int g, String path) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =g;
+		this.path=path;
+	}
+	public CubeNode( String  state, int heuristic, long encodedState) {
+		this.encodedState = encodedState;
+		this.state = state;
+		this.heuristic = heuristic;
+	}
+
+	/**
+	 * Generates all successors of the given node.
+	 * @param node the node to find successors for
+	 * @return an ArrayList<CubeNode> of all successors for
+	 * the param node
+	 */
+	public static ArrayList<CubeNode> getSuccessors(CubeNode node) {
+		ArrayList<CubeNode> successors = new ArrayList<CubeNode>();
+		for (int i=0; i<Cube.FACES.length; i++) {
+			Cube current = new Cube(node.state);
+			// Make a clockwise turn
+			current.rotate(Cube.FACES[i]);
+			
+			String newState = current.toString();
+			// Encode the corner
+			int encodedCorner = current.encodeCorners();
+			// Encode the edges
+			
+			int encodedEdgeSetOne = current.encodeEdges(0);
+			int encodedEdgeSetTwo = current.encodeEdges(6);
+			// Find all of the heuristic values for the given corner,
+			// and two edge sets
+			int[] possibleHeuristics = new int[3];
+			
+			//if encoded state is not in table default to heuristic value of 0;
+			possibleHeuristics[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+			possibleHeuristics[1] = (encodedEdgeSetOne >=IDAStar.edgesSetOne.length)? 0: IDAStar.edgesSetOne[encodedEdgeSetOne];
+			possibleHeuristics[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
+			
+			
+			// Find the maximum of the 3 heuristics as per the details of Korf's paper
+			int max = possibleHeuristics[0];
+			for (int j = 1; j < possibleHeuristics.length; j++) {
+				if (possibleHeuristics[j] > max) {
+					max = possibleHeuristics[j];
+				}
+			}
+			// Add the rotated state and it's heuristic value to the successors
+			successors.add(new CubeNode(newState, possibleHeuristics[0], node.path + Cube.FACES[i] + "1")) ;
+		}
+		return successors;
+	}
+
+	@Override
+	public int compareTo(CubeNode b) {
+		if (this.heuristic < b.heuristic) {
+			return -1;
+		} else if (this.heuristic > b.heuristic) {
+			return 1;
+		}
+		return 0;
+	}
+
+
+
+	
+}

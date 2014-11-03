@@ -22,7 +22,7 @@ public class EdgeHeuristics {
 			fileNum="Two";
 		// Make a new Queue to perform BFS
 		Queue<CubeNode> q = new LinkedList<CubeNode>();
-
+		
 		
 		HashMap<Integer,char[]> edges = new HashMap<Integer,char[]> ();
 		
@@ -63,6 +63,7 @@ public class EdgeHeuristics {
 			// see if we've seen this permutation before.
 			int encodedEdge = cube.encodeEdges(set);
 			if (!checkInFile(encodedEdge, fileNum)) {
+				
 				FileWriter pw = new FileWriter("edges"+fileNum+"Duplicate.csv",true);
 				pw.append(encodedEdge + "," + current.heuristic);
 				pw.append("\n");
@@ -77,20 +78,20 @@ public static boolean checkInFile(int encoded, String fileNum){
 	String csvFile = "edges"+fileNum+"Duplicate.csv";
 	BufferedReader br = null;
 	String line = "";
-	
- 
+	boolean i = false;
 	try {
 		br = new BufferedReader(new FileReader(csvFile));
 		while ((line = br.readLine()) != null) {
 
 		        // use comma as separator	
 			String encodedCube = line.split(",")[0];
-			if (encodedCube.isEmpty())
+			if (encodedCube.isEmpty() && i)
 				return false;
 			//System.out.println(Integer.parseInt(encodedCube)+" "+encoded);
-			else if (encoded == Integer.parseInt(encodedCube)){
+			else if (!encodedCube.isEmpty()&&encoded == Integer.parseInt(encodedCube) ){
 				return true;
 			}
+			i =true;
 		}
  
 	} catch (FileNotFoundException e1) {

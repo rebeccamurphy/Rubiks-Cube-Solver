@@ -94,7 +94,7 @@ public class CornerHeuristics {
 			// see if we've seen this permutation before.
 			int encodedCorner = cube.encodeCorners();
 			if (!checkInFile(encodedCorner)) {
-				FileWriter pw = new FileWriter("corner.csv",true);
+				FileWriter pw = new FileWriter("cornerDup.csv",true);
 				pw.append(encodedCorner + "," + current.heuristic);
 				pw.append("\n");
 				pw.flush();
@@ -105,7 +105,7 @@ public class CornerHeuristics {
 	}
 	
 	public static boolean checkInFile(int encoded){
-		String csvFile = "corner.csv";
+		String csvFile = "cornerDup.csv";
 		BufferedReader br = null;
 		String line = "";
 		

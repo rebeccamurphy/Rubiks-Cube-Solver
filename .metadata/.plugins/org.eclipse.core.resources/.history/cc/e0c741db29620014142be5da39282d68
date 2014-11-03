@@ -1,0 +1,60 @@
+package rubik;
+
+import java.util.HashMap;
+
+public class CubeNode {
+
+	/**
+	 * The state of the cube
+	 */
+	public  String state;
+
+	/**
+	 * The heuristic value
+	 */
+	public int heuristic;
+
+	/**
+	 * The g value
+	 */
+	public int g;
+
+	/**
+	 * The path from the goal state to this node
+	 */
+	public String path;
+	/**
+	 *
+	 * @param state the state of the cube
+	 * @param heuristic the heuristic value
+	 */
+	public long encodedState;
+	
+	public CubeNode( String state, int heuristic) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =0;
+		this.path="";
+	}
+	public CubeNode( String state, int heuristic, String path) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =0;
+		this.path="";
+	}
+	public CubeNode( String state, int heuristic, int g, String path) {
+		this.state = state;
+		this.heuristic = heuristic;
+		this.g =g;
+		this.path=path;
+	}
+	public CubeNode( String  state, int heuristic, long encodedState) {
+		this.encodedState = encodedState;
+		this.state = state;
+		this.heuristic = heuristic;
+	}
+
+
+
+	
+}

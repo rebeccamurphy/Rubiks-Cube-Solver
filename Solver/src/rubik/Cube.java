@@ -95,7 +95,7 @@ public class Cube {
 	private final static int[] faceYE = {0, 4, 8, 5};
 	
 	private final static int[] faceWC = {2, 6, 7, 3};
-	static int[] faceWE = {3, 6, 11, 7};
+	private final static int[] faceWE = {3, 6, 11, 7};
 	
 	private final static int[] faceRC= {0, 4, 6, 2};
 	private final static int[] faceRE= {1, 4, 9, 6};
@@ -331,6 +331,12 @@ public class Cube {
 		cubeEdgesMap=rotate(face,cubeEdgesMap, 'E');
 		
 	}
+	
+	public String rotateStr(char face){
+		return this.toString(rotate(face,cubeCornersMap, 'C'), rotate(face,cubeEdgesMap, 'E'));
+		
+	}
+	
 	public void rotate(char face, char cubieType){
 		cubeCornersMap =rotate(face,cubeCornersMap, cubieType);
 		
@@ -516,6 +522,7 @@ public class Cube {
 }
 		
 	
+	
 	/*
 	 * Converts rotated Cube back to string state
 	 * */
@@ -545,6 +552,31 @@ public class Cube {
 		return result;
 		
 	}
+	
+	public String toString (HashMap<Integer,char[]> cornersMap, HashMap<Integer,char[]> edgesMap){
+		String result ="";
+		result+=""+cornersMap.get(2)[2] + edgesMap.get(6)[2] + cornersMap.get(6)[2];//012
+		result+=""+edgesMap.get(1)[2] + "R" +  edgesMap.get(9)[2]; //345
+		result+=""+cornersMap.get(0)[2]+ edgesMap.get(4)[2] + cornersMap.get(4)[2]; //678
+		result+=""+cornersMap.get(2)[1] + edgesMap.get(1)[1] + cornersMap.get(0)[1];//01011
+		result+=""+cornersMap.get(0)[0]+edgesMap.get(4)[0]+cornersMap.get(4)[0]; //121314
+		result+=""+cornersMap.get(4)[1]+edgesMap.get(9)[1]+cornersMap.get(6)[1]; //151617
+		result+=""+edgesMap.get(3)[1]+"G"+edgesMap.get(0)[1]; //181920
+		result+=""+edgesMap.get(0)[0]+"Y"+edgesMap.get(8)[0];//212223
+		result+=""+edgesMap.get(8)[1]+"B"+edgesMap.get(11)[1];//242526
+		result+=""+cornersMap.get(3)[1]+edgesMap.get(2)[1]+cornersMap.get(1)[1];//272829
+		result+=""+cornersMap.get(1)[0]+edgesMap.get(5)[0]+cornersMap.get(5)[0];//303132
+		result+=""+cornersMap.get(5)[1]+edgesMap.get(10)[1]+cornersMap.get(7)[1];//333435
+		result+=""+cornersMap.get(1)[2]+edgesMap.get(5)[2]+cornersMap.get(5)[2];//363738
+		result+=""+edgesMap.get(2)[2]+"O"+edgesMap.get(10)[2];//394041
+		result+=""+cornersMap.get(3)[2]+edgesMap.get(7)[2]+cornersMap.get(7)[2];//424344
+		result+=""+cornersMap.get(3)[0]+edgesMap.get(7)[0]+cornersMap.get(7)[0];//454647
+		result+=""+edgesMap.get(3)[0]+"W"+edgesMap.get(11)[0];//484950
+		result+=""+cornersMap.get(2)[0]+edgesMap.get(6)[0]+cornersMap.get(6)[0];//515253
+		
+		return result;
+	}
+
 	
 	/*
 	 * encodes cube corners to a number
@@ -593,7 +625,7 @@ public class Cube {
 	public int encodeEdges(int base){
 		int result =0;
 		initEdgeValues();
-		
+		if (base==0){
 		for (int i=0; i< 6; i++){
 			//System.out.println(i);
 			char[] cubie = cubeEdgesMap.get(i);
@@ -623,8 +655,42 @@ public class Cube {
 			edgeValues.remove(indexOfCubies);
 			
 		}
-		
+		System.out.println(result);
 		return result;
+		}
+		else {
+			for (int i=6; i< 11; i++){
+				//System.out.println(i);
+				char[] cubie = cubeEdgesMap.get(i);
+				int indexOfCubies = findEdgeCubie(cubie, edgeValues);
+				int ortVal =0;
+				char[] temp = new char[2];
+				int k=0;
+				for (int j=0; j<3; j++){
+					if (cubie[j] !='0'){
+						temp[k]=cubie[j];
+						k++;
+					}
+				}
+				if (Arrays.equals(edgeValues.get(indexOfCubies), temp))
+					ortVal = indexOfCubies;
+				else
+					ortVal = indexOfCubies+1;
+				
+				int rem= edgeValues.size();
+				
+				//System.out.println("indexOfCubies " +indexOfCubies);
+				//System.out.println(ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10));
+				
+				result+= ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10);
+
+				edgeValues.remove(indexOfCubies+1);
+				edgeValues.remove(indexOfCubies);
+				
+			}
+			
+			return result;
+		}
 	}
 	
 	public static int findEdgeCubie(char[] cubie, List<char[]> cornerValuesCopy){

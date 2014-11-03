@@ -1,0 +1,55 @@
+package rubik;
+
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
+public class IDAStar {
+
+	public static int nextBound;
+	public static int nodesVisited;
+	public static PriorityQueue<CubeNode> frontier = new PriorityQueue<CubeNode>();
+	public static HashSet<CubeNode> explored = new HashSet<CubeNode>();
+	
+	public String doIDAStar(String state, boolean details){
+		if (state.equals(Cube.GOAL_STRING)){
+			return "The cube is already solved";
+		}
+		
+		//CubeNode startState = new CubeNode(state);
+		//make the first cube node	
+		
+		//set the nextbound to the orignal value
+		//nextBound = startState.heuristic; 
+		
+		//set nodes visited
+		nodesVisited =0;
+		
+		//init end
+		
+		CubeNode end = null;
+		//Loop until the solution is found
+		while (end == null) {
+			if (details) {
+				System.out.println("Current bound is: " + nextBound);
+				System.out.println("# of Nodes visited: " + nodesVisited);
+			}
+			//frontier.add(start);
+			end = search(nextBound);
+			// The iterative-deepening portion of IDA*
+			// Increment the bound if we haven't found a solution
+			nextBound++;
+			// Reset the frontier and exploredSet
+			frontier.clear();
+			explored.clear();
+		}
+		if (details) {
+			System.out.println("Solved!");
+			System.out.println("Total # of nodes visited: " + nodesVisited);
+		}
+		return formatOptimalSolution(end.path);
+		
+		return state;
+		
+	}
+	
+}

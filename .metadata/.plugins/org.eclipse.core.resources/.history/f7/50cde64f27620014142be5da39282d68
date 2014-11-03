@@ -1,0 +1,14 @@
+package rubik;
+
+public class IDAStar {
+
+	public String doIDAStar(String state){
+		if (state.equals(Cube.GOAL_STRING)){
+			return "The cube is already solved";
+		}
+			
+		return state;
+		
+	}
+	
+}
