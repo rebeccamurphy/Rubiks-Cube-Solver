@@ -76,9 +76,13 @@ public class IDAStar {
 		
 		Cube cubeStart = new Cube(state);
 		int encodedCorner = cubeStart.encodeCorners();
-		int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
 		
-		CubeNode startState = new CubeNode(state, startHeuristic);
+		
+		int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+		/*
+		System.out.println(encodedCorner +" " +startHeuristic);
+		System.exit(0);*/
+		CubeNode startState = new CubeNode(state, 0);
 		//make the first cube node	
 		
 		//set the nextbound to the original value
@@ -119,7 +123,7 @@ public class IDAStar {
 			System.out.println("Total # of nodes visited: " + nodesVisited);
 		}
 		
-		return end.path;
+		return formatSolution(end.path);
 		
 		
 	}
@@ -160,11 +164,13 @@ public class IDAStar {
 				if (successors.get(i).state.equals(Cube.GOAL_STRING))
 					return successors.get(i);
 				successors.get(i).g = current.g + 1;
+				//TODO step through this and see why one turn away isnt being added to the frontier
 				if (f <= bound && !explored.contains(successors.get(i))) {
 					// Add it to our frontier
 					frontier.add(successors.get(i));
 					
 				}
+				
 			}
 		}
 		//If the solution wasn't found at the current bound return null
@@ -196,4 +202,23 @@ public class IDAStar {
 		return heuristics;
 	}
 	
+	private static String formatSolution(String path){
+		String result ="";
+		int count =1;
+		String lastTurn="";
+		System.out.println(path);
+		for (int i=0; i< path.length()-2; i+=2){
+			String turn = path.substring(i, i+1);
+			String nextTurn = path.substring(i+2, i+3);
+			if (turn.equals(nextTurn)){
+				count++;
+			}
+			else{
+				result += turn + count;
+				count =1;
+			}
+			lastTurn = nextTurn;
+		}
+		return result + lastTurn +count;
+	}
 }

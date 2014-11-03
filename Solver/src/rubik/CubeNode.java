@@ -16,7 +16,7 @@ public class CubeNode implements Comparable<CubeNode>{
 	public int hval;
 
 	/**
-	 * g                 the cost to reach current node
+	 * g the cost to reach current node
 	 */
 	public int g;
 
@@ -86,9 +86,15 @@ public class CubeNode implements Comparable<CubeNode>{
 			int[] Hvals = new int[3];
 			
 			//if encoded state is not in table default to heuristic value of 0
+			/*
 			Hvals[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
 			Hvals[1] = (encodedEdgeSetOne >=IDAStar.edgesSetOne.length)? 0: IDAStar.edgesSetOne[encodedEdgeSetOne];
 			Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
+			*/
+			
+			Hvals[0] =0;
+			Hvals[1] = 0;
+			Hvals[2] = 0;
 			
 			
 			// Find the maximum of the 3 heuristics
