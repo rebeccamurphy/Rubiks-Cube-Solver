@@ -62,10 +62,11 @@ public class IDAStar {
 		if (state.equals(Cube.GOAL_STRING)){
 			return "The cube is already solved";
 		}
+		
 		try {
-			corners = readHeuristicFile(88179840, "corners.csv");
-			edgesSetOne = readHeuristicFile(42577920, "edgeSetOne.csv");
-			edgesSetTwo = readHeuristicFile(42577920, "edgeSetTwo.csv");
+			//corners = readHeuristicFile(88179840, "corners.csv");
+			edgesSetOne = readHeuristicFile(42577920, "edgesOneDuplicate.csv");
+			//edgesSetTwo = readHeuristicFile(42577920, "edgeSetTwo.csv");
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,14 +76,15 @@ public class IDAStar {
 		}
 		
 		Cube cubeStart = new Cube(state);
-		int encodedCorner = cubeStart.encodeCorners();
+		//int encodedCorner = cubeStart.encodeCorners();
+		int encodedEdge0 = cubeStart.encodeEdges(0);
 		
-		
-		int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+		//int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+		int startHeuristic = (encodedEdge0 > IDAStar.edgesSetOne.length) ? 0: IDAStar.edgesSetOne[encodedEdge0];
 		/*
 		System.out.println(encodedCorner +" " +startHeuristic);
 		System.exit(0);*/
-		CubeNode startState = new CubeNode(state, 0);
+		CubeNode startState = new CubeNode(state, startHeuristic);
 		//make the first cube node	
 		
 		//set the nextbound to the original value
@@ -99,6 +101,7 @@ public class IDAStar {
 		//keep going until the solution is found
 		//loop
 		while (end == null) {
+			
 			if (details) {
 				System.out.println("Current bound is: " + nextBound);
 				System.out.println("Number of Nodes visited: " + nodesVisited);
@@ -214,7 +217,10 @@ public class IDAStar {
 				count++;
 			}
 			else{
-				result += turn + count;
+				if (count > 3)
+					count = count%4;
+				if (!(count==0))
+					result += turn + count;
 				count =1;
 			}
 			lastTurn = nextTurn;

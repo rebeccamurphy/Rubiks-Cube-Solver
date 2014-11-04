@@ -86,11 +86,11 @@ public class CubeNode implements Comparable<CubeNode>{
 			int[] Hvals = new int[3];
 			
 			//if encoded state is not in table default to heuristic value of 0
-			/*
-			Hvals[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+			
+			//Hvals[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
 			Hvals[1] = (encodedEdgeSetOne >=IDAStar.edgesSetOne.length)? 0: IDAStar.edgesSetOne[encodedEdgeSetOne];
-			Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
-			*/
+			//Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
+			
 			
 			Hvals[0] =0;
 			Hvals[1] = 0;
@@ -98,14 +98,14 @@ public class CubeNode implements Comparable<CubeNode>{
 			
 			
 			// Find the maximum of the 3 heuristics
-			int max = Hvals[0];
-			for (int j = 1; j < Hvals.length; j++) {
+			int max =Hvals[1];
+			/*for (int j = 1; j < Hvals.length; j++) {
 				if (Hvals[j] > max) {
 					max = Hvals[j];
 				}
-			}
+			}*/
 			// Add current state and it's heuristic value to the successors list
-			successors.add(new CubeNode(newState, Hvals[0], node.path + Cube.FACES[i] + "1")) ;
+			successors.add(new CubeNode(newState, max, node.path + Cube.FACES[i] + "1")) ;
 		}
 		return successors;
 	}

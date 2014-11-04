@@ -83,6 +83,8 @@ public class CornerHeuristics {
 				 String newState = cube.toString();
 				 int encodedCorner = cube.encodeCorners();
 				 //System.out.println(Cube.FACES[i]);
+	        	//System.out.println(Cube.GOAL_STRING);))
+				 //if (!checkInFile(encodedCorner)){
 				 if (!checkInFile(encodedCorner)){
 					 //new combo, so we can add it to the queue
 					 //System.out.println(encodedCorner+" " +newState);
@@ -92,7 +94,9 @@ public class CornerHeuristics {
 
 			// Handle the current node. We'll encode the corners, and check to
 			// see if we've seen this permutation before.
+			cube = new Cube(current.state);
 			int encodedCorner = cube.encodeCorners();
+			
 			if (!checkInFile(encodedCorner)) {
 				FileWriter pw = new FileWriter("cornerDup.csv",true);
 				pw.append(encodedCorner + "," + current.hval);

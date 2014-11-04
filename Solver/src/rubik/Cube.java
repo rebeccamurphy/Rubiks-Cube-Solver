@@ -132,8 +132,8 @@ public class Cube {
 		System.out.println(toString());
 		for(int i=0; i< cubeCornersMap.size();i++)
 			System.out.println(i +" "+ findCubie(cubeCornersMap.get(i), cornersFaces));
-		encodeCorners(cubeCornersMap);
 		*/
+		
 	}
 	
 	
@@ -206,56 +206,6 @@ public class Cube {
 	}
 	
 	public static void initEdgeValues(){
-/*
-		//pattern is XYZ
-		if (whichedge==0){
-			//0-6
-			edgeValues0= new ArrayList<char[]>();
-			edgeValues0.add(new char[] {'Y', 'G'});//0
-			edgeValues0.add(new char[] {'G', 'Y'});//1
-			
-			edgeValues0.add(new char[] {'G', 'R'});//2
-			edgeValues0.add(new char[] {'R', 'G'});//3
-			
-			edgeValues0.add(new char[] {'G', 'O'});//4
-			edgeValues0.add(new char[] {'O', 'G'});//5
-			
-			edgeValues0.add(new char[] {'W', 'G'});//6
-			edgeValues0.add(new char[] {'G', 'W'});//7
-			
-			edgeValues0.add(new char[] {'Y', 'R'});//8
-			edgeValues0.add(new char[] {'R', 'Y'});//9
-			
-			edgeValues0.add(new char[] {'Y', 'O'});//10
-			edgeValues0.add(new char[] {'O', 'Y'});//11
-			
-		}
-		else if (whichedge==1){
-			edgeValues1= new ArrayList<char[]>();
-			edgeValues1.add(new char[] {'W', 'R'});//0
-			edgeValues1.add(new char[] {'R', 'W'});//1
-			
-			edgeValues1.add(new char[] {'W', 'O'});//2
-			edgeValues1.add(new char[] {'O', 'W'});//3
-			
-			edgeValues1.add(new char[] {'Y', 'B'});//4
-			edgeValues1.add(new char[] {'B', 'Y'});//5
-			
-			edgeValues1.add(new char[] {'B', 'R'});//6
-			edgeValues1.add(new char[] {'R', 'B'});//7
-			
-			edgeValues1.add(new char[] {'B', 'O'});//8
-			edgeValues1.add(new char[] {'O', 'B'});//9
-			
-			edgeValues1.add(new char[] {'W', 'B'});//10
-			edgeValues1.add(new char[] {'B', 'W'});//11
-			
-			
-		
-		}
-		else 
-			System.err.println("put in 0 or 1");
-	*/
 		//pattern is XYZ
 	
 			//0-6
@@ -298,24 +248,7 @@ public class Cube {
 			
 	}
 	
-	private static HashMap<String, Integer> initGoalEdges() {
-		HashMap<String, Integer> result = new HashMap<String, Integer>();
-		result.put("RW", 0);
-		result.put("GR", 1);
-		result.put("BR", 2);
-		result.put("RY", 3);
-		result.put("GW", 4);
-		result.put("GY", 5);
-		result.put("BY", 6);
-		result.put("BW", 7);
-		result.put("GO", 8);
-		result.put("OY", 9);
-		result.put("BO", 10);
-		result.put("OW", 11);
-		return result;
-	}
 
-	
 	private static boolean checkFaces(char[] cubie, char[] defaultCubieFaces){
 		for(int i =0; i< cubie.length; i++){
 			if ((new String (defaultCubieFaces)).indexOf(cubie[i])==-1){
@@ -337,7 +270,10 @@ public class Cube {
 	}
 	
 	public void rotate(char face, char cubieType){
-		cubeCornersMap =rotate(face,cubeCornersMap, cubieType);
+		if (cubieType=='C')
+			cubeCornersMap =rotate(face,cubeCornersMap, cubieType);
+		else if (cubieType=='E')
+			cubeEdgesMap = rotate(face, cubeEdgesMap, cubieType);
 		
 	}
 	public static void rotate(char face,HashMap<Integer,char[]> state, int turns, char CorE){
@@ -521,7 +457,6 @@ public class Cube {
 }
 		
 	
-	
 	/*
 	 * Converts rotated Cube back to string state
 	 * */
@@ -609,9 +544,9 @@ public class Cube {
 			orientation+= ortVal* Math.pow(3, findCubie(cubie, cornersFaces));
 			//System.out.println(ortVal +" "+orientation);
 		}
+		result = simpleState + factorial(8) *orientation;
 		//System.out.println(orientation);
 		//System.out.println(""+simpleState);
-		result = simpleState + factorial(8) *orientation;
 		
 		//System.out.println(result);
 		return result;
@@ -650,15 +585,15 @@ public class Cube {
 			
 			result+= ortVal *(rem -2) * (rem -4) *(rem-6) *(rem-8) *(rem -10);
 
-			edgeValues.remove(indexOfCubies+1);
+			edgeValues.remove(indexOfCubies);
 			edgeValues.remove(indexOfCubies);
 			
 		}
 		//System.out.println(result);
-		return result;
+		return result/10;
 		}
 		else {
-			for (int i=6; i< 11; i++){
+			for (int i=6; i< 12; i++){
 				//System.out.println(i);
 				char[] cubie = cubeEdgesMap.get(i);
 				int indexOfCubies = findEdgeCubie(cubie, edgeValues);
