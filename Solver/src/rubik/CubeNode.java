@@ -52,8 +52,8 @@ public class CubeNode implements Comparable<CubeNode>{
 
 	/**
 	 * Make all successors of the given node.
-	 * @param node to find the successor of
-	 * @return an ArrayList<CubeNode> for all the successors
+	 * @param node 
+	 * @return an arralist of cube node successors
 	 * 
 	 */
 	public static ArrayList<CubeNode> getSuccessors(CubeNode node) {
@@ -68,12 +68,7 @@ public class CubeNode implements Comparable<CubeNode>{
 			
 			//Covert the successor to a string
 			String newState = current.toString();
-			/*if (Cube.FACES[i] =='O'){
-				System.out.println(newState);
-				System.out.println(Cube.GOAL_STRING);
-				System.out.println(newState.equals(Cube.GOAL_STRING));
-				
-			}*/
+			
 			//Encode the corners of the successor 
 			int encodedCorner = current.encodeCorners();
 			
@@ -88,7 +83,6 @@ public class CubeNode implements Comparable<CubeNode>{
 			//if encoded state is not in table default to heuristic value of 0
 			
 			Hvals[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
-			
 			Hvals[1] = (encodedEdgeSetOne >=IDAStar.edgesSetOne.length)? 0: IDAStar.edgesSetOne[encodedEdgeSetOne];
 			Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
 			
@@ -101,12 +95,14 @@ public class CubeNode implements Comparable<CubeNode>{
 					max = Hvals[j];
 				}
 			}
-			// Add current state and it's heuristic value to the successors list
+			// Add current state and it's hval to the successor list
 			successors.add(new CubeNode(newState, max, node.path + Cube.FACES[i] + "1")) ;
 		}
 		return successors;
 	}
-
+/**
+ * used to compare cubenodes
+ */
 	@Override
 	public int compareTo(CubeNode b) {
 		if (this.hval< b.hval) {

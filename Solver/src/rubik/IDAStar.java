@@ -53,7 +53,12 @@ public class IDAStar {
 		 end function
 	 */
 	
-	
+	/**
+	 * Perform ida*
+	 * @param String state
+	 * @param boolean moreInfo
+	 * @return path of solution
+	 */
 	public static String doIDAStar(String state, boolean moreInfo){
 		 
 		
@@ -64,28 +69,25 @@ public class IDAStar {
 		}
 		
 		try {
-			corners = readHeuristicFile(88179840, "cornerDup.csv");
-			edgesSetOne = readHeuristicFile(42577920, "edgesOneDuplicate.csv");
-			edgesSetTwo = readHeuristicFile(42577920, "edgesTwoDuplicate.csv");
+			//read in heuristics
+			corners = readHeuristicFile(88179840, "rubik/corners.csv");
+			edgesSetOne = readHeuristicFile(42577920, "rubik/edgesOne.csv");
+			edgesSetTwo = readHeuristicFile(42577920, "rubik/edgesTwo.csv");
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		//create start state of cube
 		Cube cubeStart = new Cube(state);
-		//int encodedCorner = cubeStart.encodeCorners();
+		//encode the first set of edges 
 		int encodedEdge0 = cubeStart.encodeEdges(0);
 		
-		//int startHeuristic = (encodedCorner > IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
+		//create the start heurisitc based on the first edgeset heuristic 
 		int startHeuristic = (encodedEdge0 > IDAStar.edgesSetOne.length) ? 0: IDAStar.edgesSetOne[encodedEdge0];
-		/*
-		System.out.println(encodedCorner +" " +startHeuristic);
-		System.exit(0);*/
+		
+		//create the first node  based on the first state and start heurisitc
 		CubeNode startState = new CubeNode(state, startHeuristic);
-		//make the first cube node	
 		
 		//set the nextbound to the original value
 		//bound := h(root) 
@@ -94,7 +96,7 @@ public class IDAStar {
 		//set nodes visited
 		nodesVisited =0;
 		
-		//initilize end as null
+		//initialize end as null
 		
 		CubeNode end = null;
 		
@@ -144,7 +146,7 @@ public class IDAStar {
 			CubeNode current = frontier.poll();
 			
 			if (details){
-				//System.out.println("Current State: " + current.state);
+				System.out.println("Current State: " + current.state);
 			}
 
 			//If the goal has been reached, return the goal node
@@ -156,7 +158,7 @@ public class IDAStar {
 			// mark current node as explored
 			explored.add(current);
 			
-			// Get all of the possible successors from the current cube node
+			// Get all of the possible successors from the current cubenode
 			ArrayList<CubeNode> successors = CubeNode.getSuccessors(current);
 			
 			// Go through each successor
@@ -167,9 +169,9 @@ public class IDAStar {
 				if (successors.get(i).state.equals(Cube.GOAL_STRING))
 					return successors.get(i);
 				successors.get(i).g = current.g + 1;
-				//TODO step through this and see why one turn away isnt being added to the frontier
+				
 				if (f <= bound && !explored.contains(successors.get(i))) {
-					// Add it to our frontier
+					// Add it to the frontier
 					frontier.add(successors.get(i));
 					
 				}
@@ -180,7 +182,14 @@ public class IDAStar {
 		return null;
 	}
 	
-	
+	/****
+	 * reads the heuristics and returns an array containing the entries
+	 * @param fileLength
+	 * @param fileName
+	 * @return returns an array containing the entries
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	private static int[] readHeuristicFile (int fileLength, String fileName) throws NumberFormatException, IOException {
 		int[] heuristics = new int[fileLength];
 		FileReader file = null;
@@ -204,12 +213,15 @@ public class IDAStar {
 
 		return heuristics;
 	}
-	
+	/**
+	 * Formats the path to the proper solution ie R1R1R1 = R3
+	 * @param path
+	 * @return String condensed path
+	 */
 	private static String formatSolution(String path){
 		String result ="";
 		int count =1;
 		String lastTurn="";
-		System.out.println(path);
 		for (int i=0; i< path.length()-2; i+=2){
 			String turn = path.substring(i, i+1);
 			String nextTurn = path.substring(i+2, i+3);
