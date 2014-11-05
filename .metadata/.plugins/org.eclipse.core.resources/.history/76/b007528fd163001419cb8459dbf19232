@@ -623,7 +623,7 @@ public class Cube {
 				
 			}
 			
-			return result/10;
+			return result;
 		}
 	}
 	

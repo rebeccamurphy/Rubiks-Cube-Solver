@@ -64,9 +64,9 @@ public class IDAStar {
 		}
 		
 		try {
-			corners = readHeuristicFile(88179840, "cornerDup.csv");
+			//corners = readHeuristicFile(88179840, "corners.csv");
 			edgesSetOne = readHeuristicFile(42577920, "edgesOneDuplicate.csv");
-			edgesSetTwo = readHeuristicFile(42577920, "edgesTwoDuplicate.csv");
+			edgesSetTwo = readHeuristicFile(42577920, "edgeTwoDuplicate.csv");
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

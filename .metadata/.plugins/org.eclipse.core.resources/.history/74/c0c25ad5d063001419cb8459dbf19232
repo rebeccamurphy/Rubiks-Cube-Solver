@@ -21,7 +21,7 @@ public class Solvable {
 	        			
 	        	//System.out.println(Cube.GOAL_STRING);
 	        	//CornerHeuristics.generateCornerHeuristicsBreathFirst();
-	        	EdgeHeuristics.generateEdgeHeuristics(1);
+	        	EdgeHeuristics.generateEdgeHeuristics(0);
 	        	//System.out.println(IDAStar.doIDAStar("GGGRRRRRRRBBWWWGGOGGOYYYRBBGGOYYYRBBBBBOOOOOOWWWWWWYYY",true));
 	        }
 	        	
