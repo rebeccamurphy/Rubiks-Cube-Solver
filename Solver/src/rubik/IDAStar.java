@@ -16,8 +16,8 @@ public class IDAStar {
 	public static PriorityQueue<CubeNode> frontier = new PriorityQueue<CubeNode>();
 	public static HashSet<CubeNode> explored = new HashSet<CubeNode>();
 	public static int[] corners;
-	public static int[] edgesSetOne;
-	public static int[] edgesSetTwo;
+	public static int[] edgesOne;
+	public static int[] edgesTwo;
 	
 	/***
 	 * Sudo Code for IDA*
@@ -71,20 +71,21 @@ public class IDAStar {
 		try {
 			//read in heuristics
 			corners = readHeuristicFile(88179840, "rubik/corners.csv");
-			edgesSetOne = readHeuristicFile(42577920, "rubik/edgesOne.csv");
-			edgesSetTwo = readHeuristicFile(42577920, "rubik/edgesTwo.csv");
+			edgesOne = readHeuristicFile(42577920, "rubik/edgesOne.csv");
+			edgesTwo = readHeuristicFile(42577920, "rubik/edgesTwo.csv");
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		//create start state of cube
 		Cube cubeStart = new Cube(state);
 		//encode the first set of edges 
 		int encodedEdge0 = cubeStart.encodeEdges(0);
 		
 		//create the start heurisitc based on the first edgeset heuristic 
-		int startHeuristic = (encodedEdge0 > IDAStar.edgesSetOne.length) ? 0: IDAStar.edgesSetOne[encodedEdge0];
+		int startHeuristic = (encodedEdge0 > IDAStar.edgesOne.length) ? 0: IDAStar.edgesOne[encodedEdge0];
 		
 		//create the first node  based on the first state and start heurisitc
 		CubeNode startState = new CubeNode(state, startHeuristic);
@@ -168,6 +169,7 @@ public class IDAStar {
 				//this extra check is because my heuristic tables are incomplete
 				if (successors.get(i).state.equals(Cube.GOAL_STRING))
 					return successors.get(i);
+				
 				successors.get(i).g = current.g + 1;
 				
 				if (f <= bound && !explored.contains(successors.get(i))) {
@@ -222,12 +224,15 @@ public class IDAStar {
 		String result ="";
 		int count =1;
 		String lastTurn="";
+
+		if(path.length() ==2)
+			return path;
 		for (int i=0; i< path.length()-2; i+=2){
 			String turn = path.substring(i, i+1);
 			String nextTurn = path.substring(i+2, i+3);
 			if (turn.equals(nextTurn)){
 				count++;
-			}
+			} 
 			else{
 				if (count > 3)
 					count = count%4;
@@ -237,6 +242,6 @@ public class IDAStar {
 			}
 			lastTurn = nextTurn;
 		}
-		return result + lastTurn +count;
+		return result + lastTurn +count ;
 	}
 }

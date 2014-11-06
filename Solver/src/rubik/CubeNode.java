@@ -83,8 +83,8 @@ public class CubeNode implements Comparable<CubeNode>{
 			//if encoded state is not in table default to heuristic value of 0
 			
 			Hvals[0] =(encodedCorner >=IDAStar.corners.length) ? 0: IDAStar.corners[encodedCorner];
-			Hvals[1] = (encodedEdgeSetOne >=IDAStar.edgesSetOne.length)? 0: IDAStar.edgesSetOne[encodedEdgeSetOne];
-			Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesSetTwo.length)? 0:IDAStar.edgesSetTwo[encodedEdgeSetTwo];
+			Hvals[1] = (encodedEdgeSetOne >=IDAStar.edgesOne.length)? 0: IDAStar.edgesOne[encodedEdgeSetOne];
+			Hvals[2] = (encodedEdgeSetTwo >=IDAStar.edgesTwo.length)? 0:IDAStar.edgesTwo[encodedEdgeSetTwo];
 			
 			
 			

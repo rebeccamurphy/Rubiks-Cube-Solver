@@ -109,21 +109,30 @@ public class Cube {
 	private final static int[] faceYC = {0, 4, 5, 1};
 	private final static int[] faceYE = {0, 4, 8, 5};
 	
-	private final static int[] faceWC = {2, 6, 7, 3};
-	private final static int[] faceWE = {3, 6, 11, 7};
+	//private final static int[] faceWC = {2, 6, 7, 3};
+	//private final static int[] faceWE = {3, 6, 11, 7};
 	
-	private final static int[] faceRC= {0, 4, 6, 2};
-	private final static int[] faceRE= {1, 4, 9, 6};
+	private final static int[] faceWC = {2, 3, 7, 6};
+    private final static int[] faceWE = {3, 7, 11, 6};
+		
+	//private final static int[] faceRC= {0, 4, 6, 2};
+	//private final static int[] faceRE= {1, 4, 9, 6};
 	
+    private final static int[] faceRC= {0, 2, 6, 4};
+  	private final static int[] faceRE= {1, 6, 9, 4};
+  	
 	private final static int[] faceBC ={5, 4, 6, 7};
 	private final static int[] faceBE ={8, 9, 11, 10};
 	
 	private final static int[] faceOC ={1, 5, 7, 3};
 	private final static int[] faceOE ={2,5, 10, 7};
 	
-	private final static int[] faceGC={0, 2, 3, 1};
-	private final static int[] faceGE={0,1, 3, 2};
+	//private final static int[] faceGC={0, 2, 3, 1};
+	//private final static int[] faceGE={0,1, 3, 2};
 	
+	private final static int[] faceGC={0, 1, 3, 2};
+	private final static int[] faceGE={0,2, 3, 1};
+		
 	public String firstState;
 	
 	static List<char[]> cornerValues;
